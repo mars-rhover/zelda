@@ -23,7 +23,6 @@ public class Zelda extends Game {
     public Zelda() {
         
     }
-    private Rock rock;
     
     public void initResources() {
         this.quest = new Quest(this);
