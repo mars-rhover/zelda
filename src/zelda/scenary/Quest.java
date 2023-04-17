@@ -36,8 +36,8 @@ public class Quest extends PlayField {
         this.boards = new Board[maxX][maxY];
         
         // Board de départ
-        curBoardIndexX = 0;
-        curBoardIndexY = 0;
+        curBoardIndexX = 1;
+        curBoardIndexY = 1;
         
         this.initRessources();
     }
@@ -48,7 +48,6 @@ public class Quest extends PlayField {
         curBoardIndexY = y;
     }
 
-    
     private void initRessources() {
         this.menu = new QuestMenu(this.game);
         
@@ -74,7 +73,7 @@ public class Quest extends PlayField {
 		        	 Board b00 = new Board(this.game, indexX, indexY);
 		             
 		             // Lire le string caractère par charactère
-		                for(int i = 0; i < board.length() && i < 363; i++) {
+		                for(int i = 0; i < board.length() ; i++) {
 		                	char c = board.toUpperCase().charAt(i);
 		                	if(c == 'X') {
 		                		b00.add(new Rock(this.game, Rock.Kind.GREEN_PLAIN));
@@ -92,8 +91,19 @@ public class Quest extends PlayField {
 		                		b00.add(new Rock(this.game, Rock.Kind.GREEN_INDENTED));
 		                	}
 		                	else if (c == 'B') {
-		                		// TODO : Mettre un buisson
 		                		b00.add(new Rock(this.game, Rock.Kind.BUSH));
+		                	}
+		                	else if (c == 'Q') {
+		                		b00.add(new Rock(this.game, Rock.Kind.GREEN_STANDALONE));
+		                	}
+		                	else if (c == '?') {
+		                		b00.add(new Door(this.game, Door.Kind.OUTDOOR_DOOR));
+		                	}
+		                	else if (c == 'O') {
+		                		b00.add(new Rock(this.game, Rock.Kind.ORANGE_STANDALONE));
+		                	}
+		                	else if (c == 'e') {
+		                		b00.add(new Door(this.game, Door.Kind.STAIRS));
 		                	}
 		                }
 		                

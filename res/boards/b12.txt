@@ -1,0 +1,11 @@
+x x b . b . b . . b . b . b . b
+x x x . b . b . . b . b . b . b
+x x . . . . . . . . . . . . . .
+x / . . . . b . . b . b . b . .
+/ . b . b . . . . . . . . . . .
+. . . . . . b . . b . b . b . .
+\ . b . . . . . . . . . . . . .
+x \ . . . . b . . b . b . b . .
+x x . . . . . . . . . . . . . .
+x x b b b b b b b b b b b b b b
+x x b b b b b b b b b b b b b b 

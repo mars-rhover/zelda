@@ -12,7 +12,9 @@ public class Rock extends AbstractTile {
         GREEN_SOUTH_WEST_CORNER,
         GREEN_NORTH_EAST_CORNER,
         GREEN_NORTH_WEST_CORNER,
-        BUSH
+        BUSH,
+        GREEN_STANDALONE,
+        ORANGE_STANDALONE
     }
     
     private Kind kind;
@@ -65,6 +67,12 @@ public class Rock extends AbstractTile {
             break;
         case BUSH: 
         	this.add("res/sprites/scenary/BGGSH.GIF", 1);
+        	break;
+        case GREEN_STANDALONE: 
+        	this.add("res/sprites/scenary/GREEN_ROCK_7.GIF", 1);
+        	break;
+        case ORANGE_STANDALONE: 
+        	this.add("res/sprites/scenary/BGBR.GIF", 1);
         	break;
         }
 
