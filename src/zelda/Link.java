@@ -105,15 +105,16 @@ public class Link extends AnimatedSprite {
         sprites[33] = game.getImage("res/sprites/Link/GLFW.gif");
         sprites[34] = game.getImage("res/sprites/Link/GLFWBW.gif");
         
+        
         this.setImages(sprites);
         this.setLocation(256, 380);
         this.setAnimationFrame(0, 0);
     }
     
     public void setBoard(Board board) {
-        SpriteGroup link = new SpriteGroup("LINK SPRITE GROUPE");
-        link.add(this);
-        this.manager.setCollisionGroup(link, board.getForeground());
+        SpriteGroup links = new SpriteGroup("LINK SPRITE GROUPE");
+        links.add(this);
+        this.manager.setCollisionGroup(links, board.getForeground());
     }
     
     public void update(long elapsedTime) {
@@ -260,19 +261,6 @@ public class Link extends AnimatedSprite {
             default:
                 // do nothing
             }
-        }
-    }
-    
-    private class LinkCollisionManager extends AdvanceCollisionGroup {
-        public LinkCollisionManager() {
-            this.pixelPerfectCollision = false;
-        }
-        
-        public void collided(Sprite s1, Sprite s2) {
-            
-     
-        
-            this.revertPosition1();
         }
     }
      
