@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
+import zelda.enemies.AbstractEnemy;
+import zelda.enemies.Monster;
 import zelda.scenary.Quest;
 import zelda.scenary.QuestMenu;
 import zelda.scenary.Rock;
@@ -16,6 +19,8 @@ import com.golden.gamedev.GameLoader;
 public class Zelda extends Game {
     
     private Link link;
+    
+    private AbstractEnemy[] Enemies;
    
     private Quest quest;
     
@@ -30,6 +35,13 @@ public class Zelda extends Game {
         this.link = new Link(this);
         this.link.setBoard(this.quest.getCurrentBoard());    
         this.menu = false;
+        
+        // Pour l'instant : on mets un enemy
+        this.Enemies = new AbstractEnemy[1];
+        this.Enemies[0] = new Monster(this);
+        this.Enemies[0].setBoard(this.quest.getCurrentBoard());    
+        
+        
     }
     
     public void transitionBoard(int x,int y) {
@@ -113,6 +125,9 @@ public class Zelda extends Game {
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         this.quest.render(g);
         this.link.render(g);
+        
+        // Pour l'instant on render que notre enemy
+        this.Enemies[0].render(g);
     }
     
     public static void main(String[] args) {

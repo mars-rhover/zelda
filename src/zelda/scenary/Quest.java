@@ -36,8 +36,8 @@ public class Quest extends PlayField {
         this.boards = new Board[maxX][maxY];
         
         // Board de départ
-        curBoardIndexX = 1;
-        curBoardIndexY = 1;
+        curBoardIndexX = 0;
+        curBoardIndexY = 0;
         
         this.initRessources();
     }
@@ -50,7 +50,7 @@ public class Quest extends PlayField {
 
     private void initRessources() {
         this.menu = new QuestMenu(this.game);
-        
+    
         // Lire un/des fichiers textes qui décrivent le board, et pour chaque tile ajouter 
         Path path = Paths.get("res/boards/");
     	
@@ -105,6 +105,9 @@ public class Quest extends PlayField {
 		                	else if (c == 'e') {
 		                		b00.add(new Door(this.game, Door.Kind.STAIRS));
 		                	}
+		                	else if (c == '?') {
+		                		b00.add(new Door(this.game, Door.Kind.FLOOR_MOVE));
+		                	}
 		                }
 		                
 		                this.add(b00);
@@ -122,6 +125,8 @@ public class Quest extends PlayField {
     
     
     public Board getCurrentBoard() {
+    	///A AJOUTER TRY CATCH POUR 
+    	
         return this.boards[curBoardIndexX][curBoardIndexY];
     }
     
@@ -132,6 +137,7 @@ public class Quest extends PlayField {
     }
         
     public void update(long elapsedTime) {
+
         super.update(elapsedTime);
         this.boards[curBoardIndexX][curBoardIndexY].update(elapsedTime);
         this.menu.update(elapsedTime);
