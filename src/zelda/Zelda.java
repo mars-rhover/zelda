@@ -9,9 +9,10 @@ import java.awt.image.BufferedImage;
 import zelda.enemies.AbstractEnemy;
 import zelda.enemies.Monster;
 import zelda.scenary.Quest;
+import zelda.scenary.QuestMenu;
 import zelda.scenary.Rock;
 
-
+import zelda.scenary.Board;
 import com.golden.gamedev.Game;
 import com.golden.gamedev.GameLoader;
 import com.golden.gamedev.object.SpriteGroup;
@@ -43,8 +44,64 @@ public class Zelda extends Game {
         
         this.quest.createCollisionManagers();
     }
+    
+    public void transitionBoard(int x,int y) {
+    	
+    	//System.out.print(quest.getCurrentBoard().getX());
+    	//System.out.println(quest.getCurrentBoard().getY());
+    
+    	//pour ne pas depasser l'integralite de la carte
+    	
+    	if ((x==0||x==1) && (y==0||y==1||y==2)) {
+    	
+    	if (link.getScreenY()<588 && link.getScreenX()>672 ) {	
+    	//changer sur x a droite 
+    		this.quest.changeBoard(x, y+1);
+    		link.setBoard(this.quest.getCurrentBoard());
+    		link.setLocation(300, 300);	
+    	}
+    	
+    	if (link.getScreenY()<588 && link.getScreenX()<0 ) {
+    		//changer sur x a gauche 
+    		this.quest.changeBoard(x, y-1);
+    		link.setBoard(this.quest.getCurrentBoard());
+    		link.setLocation(300, 300);	
+    	}
+    	
+    	//!!!------------>>>    todo >>  a changer la valeur de Y a cause du menu 
+    	if (link.getScreenY()>588 && link.getScreenX()<672 ) {	
+        	//changer sur y en haut  
+    		this.quest.changeBoard(x+1, y);
+    		link.setBoard(this.quest.getCurrentBoard());
+    		link.setLocation(300, 300);	
+        	}
+        	
+        	if (link.getScreenY()<0 && link.getScreenX()<672 ) {
+        		//changer sur y a gauche 
+        		this.quest.changeBoard(x-1, y);
+        		link.setBoard(this.quest.getCurrentBoard());
+        		link.setLocation(300, 300);	
+        	}
+        	}
+        		
+        
+    }
+    	
+    	
+    
+    
+ 
         
     public void update(long elapsedTime) {
+    	//transition de board quand link bouge 
+    	int x = quest.getCurrentBoard().getX();
+    	int y = quest.getCurrentBoard().getY();
+    	transitionBoard(x,y);
+
+    	
+    	
+    	
+    	
         if (this.keyPressed(KeyEvent.VK_ALT)) {
             this.link.fight();
         } else if (this.keyDown(KeyEvent.VK_LEFT)) {

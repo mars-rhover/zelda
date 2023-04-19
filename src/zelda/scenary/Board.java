@@ -35,6 +35,15 @@ public class Board {
         this.size = 0;
         display = true;
     }
+    //ajouter rho
+    public Board( int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.tiles = new AbstractTile[WIDTH][HEIGHT];
+        this.size = 0;
+        display = true;
+    }
+
 
     public int getX() {
         return this.x;
