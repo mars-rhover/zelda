@@ -45,6 +45,7 @@ public class Link extends AnimatedSprite {
     
     public Link(Game game) {
         this.game = game;
+        this.life=6;
         this.shield = Link.DEFAULT_SHIELD;
         this.orientation = Link.DEFAULT_ORIENTATION;
         this.getAnimationTimer().setDelay(Link.ANIMATION_DELAY);
@@ -120,11 +121,28 @@ public class Link extends AnimatedSprite {
     	System.out.println("Ouuuuch");
     }
     
+    public int getLinkLifePoints() {
+    	return this.life;
+    }
+    
+//    public void setLifeLink() {
+//    	
+//    }
+   
+    	
+    	
+    
+    
+    
+    
     public void setBoard(Board board) {
         links_SGroup.add(this);
     }
     
     public void update(long elapsedTime) {
+    	//System.out.println(this.life);
+    	
+    	
         super.update(elapsedTime);
         if (this.figth.action(elapsedTime)) {
             this.figth.setActive(false);

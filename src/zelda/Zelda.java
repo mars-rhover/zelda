@@ -72,14 +72,14 @@ public class Zelda extends Game {
     	
     	//!!!------------>>>    todo >>  a changer la valeur de Y a cause du menu 
     	if (link.getScreenY()>588 && link.getScreenX()<672 ) {	
-        	//changer sur y en haut  
+        	//link bouge sur une carte du bas
     		this.quest.changeBoard(x+1, y);
     		link.setBoard(this.quest.getCurrentBoard());
     		link.setLocation(300, 300);	
         	}
-        	
-        	if (link.getScreenY()<0 && link.getScreenX()<672 ) {
-        		//changer sur y a gauche 
+        	//120 pour qu
+        	if (link.getScreenY()<120 && link.getScreenX()<672 ) {
+        		//link bouge sur une carte du haut 
         		this.quest.changeBoard(x-1, y);
         		link.setBoard(this.quest.getCurrentBoard());
         		link.setLocation(300, 300);	
@@ -90,16 +90,12 @@ public class Zelda extends Game {
     }
     	
     	
-    
-    
- 
-        
     public void update(long elapsedTime) {
     	//transition de board quand link bouge 
     	int x = quest.getCurrentBoard().getX();
     	int y = quest.getCurrentBoard().getY();
+        
     	transitionBoard(x,y);
-
         if (this.keyPressed(KeyEvent.VK_ALT)) {
             this.link.fight();
         } else if (this.keyDown(KeyEvent.VK_LEFT)) {
