@@ -41,9 +41,7 @@ public class Zelda extends Game {
         this.Enemies = new AbstractEnemy[1];
         this.Enemies[0] = new Monster(this,209,360);
         this.Enemies[0].setBoard(this.quest.getBoard(1,1));   
-        
-        // Ajouter un monstre par board
-        
+                
         this.quest.createCollisionManagers();
     }
     

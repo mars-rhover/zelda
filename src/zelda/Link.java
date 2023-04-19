@@ -118,6 +118,7 @@ public class Link extends AnimatedSprite {
     }
     
     public void screamInPain() {
+    	this.life -= 1;
     	System.out.println("Ouuuuch");
     }
     

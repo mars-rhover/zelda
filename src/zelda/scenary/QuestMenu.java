@@ -25,10 +25,6 @@ public class QuestMenu {
         
         this.sprites.add(new Sprite(this.game.getImage("res/sprites/LIFE.GIF"), 500, 30));
        
-        
-        
-        
-        
         this.sprites.add(new Sprite(this.game.getImage("res/sprites/BOMB.GIF"), 230, 79));
         this.sprites.add(new Sprite(this.game.getImage("res/sprites/X.GIF"), 270, 80));
         this.sprites.add(new Sprite(this.game.getImage("res/sprites/KEY.GIF"), 230, 50));
@@ -54,6 +50,7 @@ public class QuestMenu {
     	int y=posY;
     	
     	int LinklifePoints = this.game.getLink().getLinkLifePoints();
+    	
     	for (int i=0;i<LinklifePoints;i++) {
     		this.sprites.add(new Sprite(this.game.getImage("res/sprites/Objects/OHC.gif"), x, y));
     		x=x-17;

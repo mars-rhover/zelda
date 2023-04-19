@@ -62,7 +62,6 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 				filename = prefix+i+suffix;
 				String pathName = folder+File.separatorChar+filename;
 				pathName = pathName.replace('/', File.separatorChar);
-				System.out.println("Emplacement du fichier : "+pathName);
 				Paths.get(pathName).toRealPath(); // essaye de trouver le fichier
 				countImg++;
 				

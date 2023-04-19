@@ -194,6 +194,10 @@ public class Quest extends PlayField {
     	return this.boards[x][y];
     }
     
+    public Board[][] getBoards() {
+    	return this.boards;
+    }
+    
     public void add(Board board) {
         //this.addGroup(board.getBackground());
         //this.addGroup(board.getForground());
