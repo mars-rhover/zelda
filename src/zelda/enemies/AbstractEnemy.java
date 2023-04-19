@@ -104,12 +104,18 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	
 	// Retourne la board sur laquelle est l'enemi
 	public Board getBoard() {
+		System.out.println("Enemy sur la board "+this.board.getX()+" "+this.board.getY());
 		return this.board;
 	}
 	
 	// Retourne true si l'enemy est sur la board 
 	public boolean isOnBoard(Board board) {
 		return this.board == board;
+	}
+	
+	
+	public boolean isAlive() {
+		return this.life > 0;
 	}
 	
 	// Medhodes pour voir les sprites et les updates
@@ -123,9 +129,7 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	public void decreaseLife() {
 		this.life = this.life - 1;
 		if(this.life == 0) {
-			this.enemies_SGroup.setActive(false); 	// desactive le collision manager
-			this.enemies_SGroup.reset();
-			this.setActive(false);
+			this.setActive(false);// desactive le collision manager
 			System.out.println("Mooort");
 		}
 	}

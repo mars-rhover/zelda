@@ -19,7 +19,7 @@ public class Link_EnemyCollisionManager extends AdvanceCollisionGroup {
 	    }
 	    
 	    public void collided(Sprite s1, Sprite s2) {
-			System.out.println("Collision");
+			System.out.println("Link _ Enemy Collision");
 
 	    	this.enemy.decreaseLife();
 	    	this.link.screamInPain();

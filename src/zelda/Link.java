@@ -15,7 +15,6 @@ import com.golden.gamedev.object.CollisionManager;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
 import com.golden.gamedev.object.Timer;
-import com.golden.gamedev.object.collision.AdvanceCollisionGroup;
 
 public class Link extends AnimatedSprite {
     

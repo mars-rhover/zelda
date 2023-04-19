@@ -39,8 +39,10 @@ public class Zelda extends Game {
         
         // Pour l'instant : on mets un enemy
         this.Enemies = new AbstractEnemy[1];
-        this.Enemies[0] = new Monster(this);
-        this.Enemies[0].setBoard(this.quest.getCurrentBoard());    
+        this.Enemies[0] = new Monster(this,209,360);
+        this.Enemies[0].setBoard(this.quest.getBoard(1,1));   
+        
+        // Ajouter un monstre par board
         
         this.quest.createCollisionManagers();
     }
@@ -98,10 +100,6 @@ public class Zelda extends Game {
     	int y = quest.getCurrentBoard().getY();
     	transitionBoard(x,y);
 
-    	
-    	
-    	
-    	
         if (this.keyPressed(KeyEvent.VK_ALT)) {
             this.link.fight();
         } else if (this.keyDown(KeyEvent.VK_LEFT)) {
@@ -118,22 +116,17 @@ public class Zelda extends Game {
             this.link.setSpeed(0, 0);
         }
         
-        // Pour test
-        if (this.keyPressed(KeyEvent.VK_SPACE)) {
-            this.quest.changeBoard(0, 0);
-            this.link.setBoard(this.quest.getCurrentBoard());
-        } 
-        
         this.quest.update(elapsedTime);
         this.link.update(elapsedTime);
         
-        // Pour l'instant on update que notre enemy mais faudra update que ceux de la board actuelle
-        if(this.Enemies[0].isOnBoard(this.quest.getCurrentBoard())) {
-        	this.Enemies[0].update(elapsedTime);
-        } else {
-        	this.Enemies[0].setActive(false);
+        // Updates de tous les enemies vivants et actifs (de la board)
+        for(int i=0; i<Enemies.length;i++) {
+        	 if(this.Enemies[0].isActive() && this.Enemies[0].isAlive()) {
+             	this.Enemies[0].update(elapsedTime);
+             } 
         }
-        
+       
+
     }
 
     public void render(Graphics2D g) {
@@ -143,7 +136,10 @@ public class Zelda extends Game {
         this.link.render(g);
         
         // Pour l'instant on render que notre enemy
-        this.Enemies[0].render(g);
+        if(this.Enemies[0].isActive() && this.Enemies[0].isAlive()) {
+        	this.Enemies[0].render(g);
+       }
+       
     }
     
     // Retourne le sprite group de link : pour les collisions managers

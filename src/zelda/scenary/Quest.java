@@ -9,9 +9,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import zelda.Link;
 import zelda.Zelda;
 import zelda.collisionManagers.Link_EnemyCollisionManager;
 import zelda.collisionManagers.Link_PlayfieldCollisionManager;
+import zelda.enemies.AbstractEnemy;
 
 import com.golden.gamedev.object.CollisionManager;
 import com.golden.gamedev.object.PlayField;
@@ -19,6 +21,7 @@ import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
 import com.golden.gamedev.object.collision.AdvanceCollisionGroup;
 import com.golden.gamedev.object.collision.BasicCollisionGroup;
+import com.golden.gamedev.object.collision.CollisionGroup;
 
 public class Quest extends PlayField {
     
@@ -52,20 +55,47 @@ public class Quest extends PlayField {
     //////////////////////////////////////////////////// COLLISION MANAGERS DANS QUEST
     public void createCollisionManagers() {
     	
-    	SpriteGroup Link_SG = this.game.getLink().getSpriteGroup();
-    	Board boardActuelle = this.boards[curBoardIndexX][curBoardIndexY];
-    	
-    	// Collision Link - playfield pour la board actuelle
-    	this.addCollisionGroup(Link_SG, boardActuelle.getForeground(), new Link_PlayfieldCollisionManager(this.game.getLink()));
-
-    	
-    	// Collisions Link - Enemy qui sont sur la board actuelle
-    	for(int i = 0; i < this.game.getEnemies().length; i++) {
-    		if(this.game.getEnemy(i).getBoard() == boardActuelle) {
-    			SpriteGroup Enemy_SG = this.game.getEnemy(i).getSpriteGroup();
-        		this.addCollisionGroup(Link_SG, Enemy_SG, new Link_EnemyCollisionManager(this.game.getLink(),this.game.getEnemy(i)));
-    		}
-    	 }
+	    // Désactiver et supprimer tous les collisions groups actuels
+	    	int nbColGroup = this.getCollisionGroups().length;
+	        for(int i = 0; i<nbColGroup; i++) {
+	        	this.getCollisionGroups()[0].setActive(false);
+	        	this.removeCollisionGroup(this.getCollisionGroups()[0]);
+	        }
+	        
+	    // Ajouter les nouveaux collisionManagers
+	    	CollisionManager colGroup; // Variable collisionManager pour lisibilité
+	    	
+	    	Link link = this.game.getLink();	// Link
+	    	SpriteGroup Link_SG = link.getSpriteGroup(); // Sprite group de link
+	    	Board boardActuelle = this.boards[curBoardIndexX][curBoardIndexY]; // Nouvelle board actuelle
+	    	
+	    	// Ajouter Collision Link - playfield pour la board actuelle
+	    	this.addCollisionGroup(Link_SG, boardActuelle.getForeground(), new Link_PlayfieldCollisionManager(link));
+	    	
+	
+	    	// Ajouter Collisions Link - Enemy 
+	    		// Récupérer tous les enemis du jeu
+	    	for(int i = 0; i < this.game.getEnemies().length; i++) {
+	    		// Parcourir le tableau d'enemis, s'arreter si pas d'enemi trouvé
+	    		if(this.game.getEnemy(i) == null) 
+	    			break;
+	    		
+	    		// variables pour raccourci
+	    		AbstractEnemy enemy = this.game.getEnemy(i); // L'enemi
+	    		SpriteGroup Enemy_SG = enemy.getSpriteGroup(); // le spriteGroup de l'enemi
+	    	
+	    		// Si l'enemy est sur la nouvelle board actuelle et il est en vie, ajouter une collision et activer
+	    		if(enemy.isOnBoard(boardActuelle) && enemy.isAlive()) {
+	    			enemy.setActive(true);
+	    			this.addCollisionGroup(Link_SG, Enemy_SG, new Link_EnemyCollisionManager(link,enemy));
+		    			
+		    	// Sinon désactiver l'enemy
+	    		} else {    			
+	    			enemy.setActive(false);
+	    		}
+	    		
+	    	 }
+	    	
    
 	}
     
@@ -77,11 +107,6 @@ public class Quest extends PlayField {
     	curBoardIndexX = x;
         curBoardIndexY = y;
         
-        // Désactiver tous les collisions groups actuels
-        for(int i = 0; i<this.getCollisionGroups().length; i++) {
-        	this.getCollisionGroups()[i].setActive(false);
-        }
-       
         // Créé des collisionManagers pour la board actuelle
         createCollisionManagers();
         
@@ -106,7 +131,7 @@ public class Quest extends PlayField {
 		        	int indexX = Integer.parseInt(boardName.substring(1, 2));
 		        	int indexY = Integer.parseInt(boardName.substring(2, 3));
 		        	
-		        	String board = this.getBoard(filePath.toString());
+		        	String board = this.readBoardFile(filePath.toString());
 		        	 Board b00 = new Board(this.game, indexX, indexY);
 		             
 		             // Lire le string caractère par charactère
@@ -162,9 +187,11 @@ public class Quest extends PlayField {
     
     
     public Board getCurrentBoard() {
-    	///A AJOUTER TRY CATCH POUR 
-    	
         return this.boards[curBoardIndexX][curBoardIndexY];
+    }
+    
+    public Board getBoard(int x, int y) {
+    	return this.boards[x][y];
     }
     
     public void add(Board board) {
@@ -174,7 +201,6 @@ public class Quest extends PlayField {
     }
         
     public void update(long elapsedTime) {
-
         super.update(elapsedTime);
         this.boards[curBoardIndexX][curBoardIndexY].update(elapsedTime);
         this.menu.update(elapsedTime);
@@ -187,9 +213,8 @@ public class Quest extends PlayField {
         this.menu.render(g);
     }
     
-    //// AJOUTE 
-    
-    private String getBoard(String boardPath) {
+    //// Recupère un fichier texte et renvoie une string pour créer un board   
+    private String readBoardFile(String boardPath) {
     	Path path = Paths.get(boardPath);
 		boolean doFileExist = Files.exists(path);
 		String s = ""; // String dans lequel on copie les charactères

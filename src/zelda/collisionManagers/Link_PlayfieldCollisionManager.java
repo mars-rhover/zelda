@@ -16,7 +16,7 @@ public class Link_PlayfieldCollisionManager extends AdvanceCollisionGroup {
     
     public void collided(Sprite s1, Sprite s2) {
         
-       System.out.println("Link a collide avec un mur");
+       //System.out.println("Link a collide avec un mur");
         this.revertPosition1();
     }
 }
