@@ -14,11 +14,12 @@ import zelda.scenary.Rock;
 
 import com.golden.gamedev.Game;
 import com.golden.gamedev.GameLoader;
+import com.golden.gamedev.object.SpriteGroup;
 
 public class Zelda extends Game {
     
     private Link link;
-    
+        
     private AbstractEnemy[] Enemies;
    
     private Quest quest;
@@ -40,7 +41,7 @@ public class Zelda extends Game {
         this.Enemies[0] = new Monster(this);
         this.Enemies[0].setBoard(this.quest.getCurrentBoard());    
         
-        
+        this.quest.createCollisionManagers();
     }
         
     public void update(long elapsedTime) {
@@ -59,8 +60,23 @@ public class Zelda extends Game {
         } else {
             this.link.setSpeed(0, 0);
         }
+        
+        // Pour test
+        if (this.keyPressed(KeyEvent.VK_SPACE)) {
+            this.quest.changeBoard(0, 0);
+            this.link.setBoard(this.quest.getCurrentBoard());
+        } 
+        
         this.quest.update(elapsedTime);
         this.link.update(elapsedTime);
+        
+        // Pour l'instant on update que notre enemy mais faudra update que ceux de la board actuelle
+        if(this.Enemies[0].isOnBoard(this.quest.getCurrentBoard())) {
+        	this.Enemies[0].update(elapsedTime);
+        } else {
+        	this.Enemies[0].setActive(false);
+        }
+        
     }
 
     public void render(Graphics2D g) {
@@ -71,6 +87,26 @@ public class Zelda extends Game {
         
         // Pour l'instant on render que notre enemy
         this.Enemies[0].render(g);
+    }
+    
+    // Retourne le sprite group de link : pour les collisions managers
+    public SpriteGroup getLinkSG() {
+		return this.link.getSpriteGroup();
+    }
+    
+    public Link getLink() {
+    	return this.link;
+    }
+    
+    public AbstractEnemy getEnemy(int index) {
+    	if(index>this.Enemies.length)
+    		throw new IllegalArgumentException("Index de l'enemi incorrect");
+    	
+    	return this.Enemies[index];
+    }
+    
+    public AbstractEnemy[] getEnemies() {
+    	return this.Enemies;
     }
     
     public static void main(String[] args) {

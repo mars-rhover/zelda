@@ -10,8 +10,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import zelda.Zelda;
+import zelda.collisionManagers.Link_EnemyCollisionManager;
+import zelda.collisionManagers.Link_PlayfieldCollisionManager;
 
+import com.golden.gamedev.object.CollisionManager;
 import com.golden.gamedev.object.PlayField;
+import com.golden.gamedev.object.Sprite;
+import com.golden.gamedev.object.SpriteGroup;
+import com.golden.gamedev.object.collision.AdvanceCollisionGroup;
+import com.golden.gamedev.object.collision.BasicCollisionGroup;
 
 public class Quest extends PlayField {
     
@@ -42,10 +49,42 @@ public class Quest extends PlayField {
         this.initRessources();
     }
     
-    // Changer de board : indiquer l'index x et y de la board
+    //////////////////////////////////////////////////// COLLISION MANAGERS DANS QUEST
+    public void createCollisionManagers() {
+    	
+    	SpriteGroup Link_SG = this.game.getLink().getSpriteGroup();
+    	Board boardActuelle = this.boards[curBoardIndexX][curBoardIndexY];
+    	
+    	// Collision Link - playfield pour la board actuelle
+    	this.addCollisionGroup(Link_SG, boardActuelle.getForeground(), new Link_PlayfieldCollisionManager(this.game.getLink()));
+
+    	
+    	// Collisions Link - Enemy qui sont sur la board actuelle
+    	for(int i = 0; i < this.game.getEnemies().length; i++) {
+    		if(this.game.getEnemy(i).getBoard() == boardActuelle) {
+    			SpriteGroup Enemy_SG = this.game.getEnemy(i).getSpriteGroup();
+        		this.addCollisionGroup(Link_SG, Enemy_SG, new Link_EnemyCollisionManager(this.game.getLink(),this.game.getEnemy(i)));
+    		}
+    	 }
+   
+	}
+    
+    
+    /////////////////////////////////////////////////// Fin collision managers
+
+	// Changer de board : indiquer l'index x et y de la board
     public void changeBoard(int x, int y) {
     	curBoardIndexX = x;
         curBoardIndexY = y;
+        
+        // Désactiver tous les collisions groups actuels
+        for(int i = 0; i<this.getCollisionGroups().length; i++) {
+        	this.getCollisionGroups()[i].setActive(false);
+        }
+       
+        // Créé des collisionManagers pour la board actuelle
+        createCollisionManagers();
+        
     }
 
     private void initRessources() {
@@ -64,10 +103,8 @@ public class Quest extends PlayField {
 		        	
 		        	// Analyser le nom du fichier pour avoir sa position
 		        	String boardName = filePath.getFileName().toString();
-		        	System.out.println(boardName+" : ");
 		        	int indexX = Integer.parseInt(boardName.substring(1, 2));
 		        	int indexY = Integer.parseInt(boardName.substring(2, 3));
-		        	System.out.println(boardName+" : "+indexX+" "+indexY);
 		        	
 		        	String board = this.getBoard(filePath.toString());
 		        	 Board b00 = new Board(this.game, indexX, indexY);
@@ -135,6 +172,7 @@ public class Quest extends PlayField {
         super.update(elapsedTime);
         this.boards[curBoardIndexX][curBoardIndexY].update(elapsedTime);
         this.menu.update(elapsedTime);
+        this.checkCollisions();  
     }
     
     public void render(Graphics2D g) {
@@ -171,7 +209,7 @@ public class Quest extends PlayField {
     }
      
     
-    // Re
+    // Compter le nombre de boards totales en X et Y dans la playfield
     private String getBoardSchema(String boardPath) {
     	String boardSchema = ""; // String qui décrit le schéma 5x6 = 5 sur 6
     
@@ -187,7 +225,6 @@ public class Quest extends PlayField {
 		
 		    for (Path filePath: stream) {
 		        if(Files.isRegularFile(filePath)) {	
-		        	System.out.println("Fichier : "+filePath);
 		        	
 		        	String boardName = filePath.getFileName().toString();
 		        	// Pour chaque fichier : regarder son indexX et indexY

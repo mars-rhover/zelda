@@ -4,6 +4,7 @@ package zelda;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import zelda.collisionManagers.Link_PlayfieldCollisionManager;
 import zelda.objects.Blade;
 import zelda.objects.Shield;
 import zelda.scenary.Board;
@@ -28,6 +29,8 @@ public class Link extends AnimatedSprite {
     
     public static final Orientation DEFAULT_ORIENTATION = Orientation.NORTH;
     
+    private static SpriteGroup links_SGroup;
+    
     private Game game;
     
     private Blade.Kind blade;
@@ -40,7 +43,6 @@ public class Link extends AnimatedSprite {
     
     private Timer figth;
     
-    private CollisionManager manager;
     
     public Link(Game game) {
         this.game = game;
@@ -49,7 +51,7 @@ public class Link extends AnimatedSprite {
         this.getAnimationTimer().setDelay(Link.ANIMATION_DELAY);
         this.figth = new Timer(Link.FIGHT_TIMER);
         this.figth.setActive(false);
-        this.manager = new LinkCollisionManager();
+        links_SGroup = new SpriteGroup("LINK SPRITE GROUP");
         this.initResources();
     }
     
@@ -111,10 +113,16 @@ public class Link extends AnimatedSprite {
         this.setAnimationFrame(0, 0);
     }
     
+    public SpriteGroup getSpriteGroup() {
+    	return links_SGroup;
+    }
+    
+    public void screamInPain() {
+    	System.out.println("Ouuuuch");
+    }
+    
     public void setBoard(Board board) {
-        SpriteGroup links = new SpriteGroup("LINK SPRITE GROUPE");
-        links.add(this);
-        this.manager.setCollisionGroup(links, board.getForeground());
+        links_SGroup.add(this);
     }
     
     public void update(long elapsedTime) {
@@ -133,8 +141,6 @@ public class Link extends AnimatedSprite {
                 this.setAnimationFrame(0, 0);
             }
         }
-        if (this.manager != null) 
-            this.manager.checkCollision();
     }
 
     
