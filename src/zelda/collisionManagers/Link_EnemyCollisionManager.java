@@ -24,19 +24,29 @@ public class Link_EnemyCollisionManager extends AdvanceCollisionGroup {
 	    }
 	    
 	    public void collided(Sprite s1, Sprite s2) {
-			System.out.println("Link _ Enemy Collision");
+//			System.out.println("Link _ Enemy Collision");
 			
 			long currentTime = System.currentTimeMillis();
-	        if (currentTime - lastPlayedTime > MIN_TIME_BETWEEN_SOUNDS_MS) {
-	        	SoundManager.playSound("res/sounds/ScreamInPain.wav");
-	            lastPlayedTime = currentTime;
+	       
+	        
+	        // Viens d'attaquer
+	        if(!enemy.freeze && enemy.justAttacked) {
+	        	enemy.reculer(enemy.attackDir);
+	        	enemy.justAttacked = false;
+	        	enemy.freeze = true;	
 	        }
 
-
-	    	this.enemy.decreaseLife();
-	    	this.link.screamInPain();
-	    	
-	    	this.revertPosition1();
+	        if(!link.wasTouched && link.canBeTouched) {
+	        	this.link.screamInPain();
+	        	 if (currentTime - lastPlayedTime > MIN_TIME_BETWEEN_SOUNDS_MS) {
+	 	        	SoundManager.playSound("res/sounds/ScreamInPain.wav");
+	 	            lastPlayedTime = currentTime;
+	 	        }
+	        } else {
+	        	// Invulnerable
+	        }
+	        	
+	    	//this.revertPosition1();
 	        //this.revertPosition2();
 	    }
 	   

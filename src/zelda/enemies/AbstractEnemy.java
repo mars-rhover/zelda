@@ -29,7 +29,7 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 
 	protected String name = "Enemy";
 	
-	protected int life = 45;
+	protected int life = 8;
 	
 	protected static int weapon;
 	
@@ -55,13 +55,13 @@ public abstract class AbstractEnemy extends AnimatedSprite {
     
     private double distX, distY;
     
-    private boolean justAttacked = false;
+    public boolean justAttacked = false;
     
     private Timer freezeTimer;
     
-    private int attackDir = 0;
+    public int attackDir = 0;
 	
-    private boolean freeze; // freeze true si l'enemi est en "pause" (en terme de mouvement)
+    public boolean freeze; // freeze true si l'enemi est en "pause" (en terme de mouvement)
 	
 	// Créé un enemy et le place à posX, posY et sur la board Board
 	public AbstractEnemy(Zelda game, String spriteName, double posX, double posY) {
@@ -71,7 +71,7 @@ public abstract class AbstractEnemy extends AnimatedSprite {
         this.distX = Zelda.PLAYGROUND_SIZEX;
         this.distY = Zelda.PLAYGROUND_SIZEY;
         this.freeze = false;
-        this.setAnimationTimer(new Timer(ANIMATION_DELAY));
+        this.getAnimationTimer().setDelay(ANIMATION_DELAY);
         this.FIGHT_TIMER = new Timer(FIGHT_DELAY);
         this.freezeTimer = new Timer(FREEZE_DELAY);
 	}
@@ -119,19 +119,6 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	    
 	}
 	
-	
-	public void animate(int startFrame, int stopFrame) {
-		// set animation speed 100 milliseconds for each frame
-	    this.getAnimationTimer().setDelay(ANIMATION_DELAY);
-
-	    // set animation frame starting from the first image to the third image
-	    this.setAnimationFrame(startFrame, startFrame);
-
-	    // animate the sprite, and perform continous animation
-	    this.setAnimate(true);
-	    this.setLoopAnim(true);
-	}
-	
 	// Place le sprite dans une board
 	public void setBoard(Board board) {
 		this.board = board;
@@ -157,14 +144,7 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	// Medhodes pour voir les sprites et les updates
 	public void update(long elapsedTime) {
         super.update(elapsedTime);
-        
-        // Viens d'attaquer
-        if(!freeze && this.justAttacked) {
-        	this.reculer(this.attackDir);
-        	this.justAttacked = false;
-        	freeze = true;	
-        }
-        
+         
     	if (freeze && freezeTimer.action(elapsedTime)) {
     		freeze = false;
     	}
@@ -233,7 +213,7 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	}
 	
 	// Fait reculer le sprite (après attaque). Pour changer sprites réécrire cette méthode dans sous.classe.
-	protected void reculer(int atk) {
+	public void reculer(int atk) {
 		if(atk == 1) {
 			this.moveX(-attackDist);
 		} else if (atk == -1) {
