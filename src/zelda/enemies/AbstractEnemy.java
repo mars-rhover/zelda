@@ -149,11 +149,9 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 			
 			if(link_PosX < this.getScreenX()) {
 				this.moveX(-this.SPEED);
-				System.out.println("Bougé sur X");
 				return 'x';
 			} else if (link_PosX > this.getScreenX()){
 				this.moveX(this.SPEED);
-				System.out.println("Bougé sur X");
 				return 'x';
 			}
 			
@@ -162,11 +160,9 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 		
 		if(link_PosY < this.getScreenY()) {
 			this.moveY(-this.SPEED);
-			System.out.println("Bougé sur Y");
 			return 'y';
 		} else if(link_PosY > this.getScreenY()) {
 			this.moveY(this.SPEED);
-			System.out.println("Bougé sur Y");
 			return 'y';
 		}
 		

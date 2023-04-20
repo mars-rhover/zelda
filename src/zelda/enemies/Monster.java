@@ -51,14 +51,7 @@ public class Monster extends AbstractEnemy {
 		}
 		
 		// si une autre lettre ou vide on change pas le frame
-		
-				
-		
-		
-		
-		
-	
-		
+			
 	}
 	
 }

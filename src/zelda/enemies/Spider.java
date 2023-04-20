@@ -21,8 +21,6 @@ public class Spider extends AbstractEnemy {
 		super.FIGHT_DELAY = this.FIGHT_DELAY;
 	}
 	
-	protected void setOrientationSprite(char xORy) {
-		System.out.println("...");
-	}
+	protected void setOrientationSprite(char xORy) {};
 
 }
