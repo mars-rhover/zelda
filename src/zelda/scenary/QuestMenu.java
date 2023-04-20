@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import zelda.Zelda;
 
 import zelda.Link;
+import zelda.objects.*;
 
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
@@ -13,6 +14,7 @@ import com.golden.gamedev.object.SpriteGroup;
 public class QuestMenu {
     
     private SpriteGroup sprites;
+    
 
     private Zelda game;
     
@@ -27,13 +29,27 @@ public class QuestMenu {
        
         this.sprites.add(new Sprite(this.game.getImage("res/sprites/BOMB.GIF"), 230, 79));
         this.sprites.add(new Sprite(this.game.getImage("res/sprites/X.GIF"), 270, 80));
+        
+        
         this.sprites.add(new Sprite(this.game.getImage("res/sprites/KEY.GIF"), 230, 50));
         this.sprites.add(new Sprite(this.game.getImage("res/sprites/X.GIF"), 270, 50));
+        
+        
         this.sprites.add(new Sprite(this.game.getImage("res/sprites/PIECE.GIF"), 230, 20));
         this.sprites.add(new Sprite(this.game.getImage("res/sprites/X.GIF"), 270, 20));
 
 
     }
+    
+    
+    
+    
+//    private void creationRubies(int x, int y) {
+//    	Ruby r = new Ruby(this.game,x,y);
+//    	r.incrementRubies();
+//    }
+//    
+    
     
     public void move(long elapsedTime, boolean flag) {
         Sprite[] s = this.sprites.getSprites();

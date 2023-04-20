@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+
 import com.golden.gamedev.Game;
 import com.golden.gamedev.object.AnimatedSprite;
 import com.golden.gamedev.object.CollisionManager;
@@ -20,6 +21,8 @@ import zelda.Zelda;
 import zelda.objects.Shield;
 import zelda.scenary.Board;
 import zelda.objects.*;
+
+
 
 public abstract class AbstractEnemy extends AnimatedSprite {
 	// Dans la super classe 
@@ -292,6 +295,7 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 		if(this.life == 0) {
 			this.setActive(false);// desactive le collision manager
 			System.out.println("Mooort");
+			
 			
 		}
 	}

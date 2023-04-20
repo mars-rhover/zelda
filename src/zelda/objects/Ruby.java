@@ -50,6 +50,7 @@ public class Ruby extends Sprite {
 		countRubies++;
 	}
 	
+	
 	 public Sprite getSprite() {
 	    return this;
 	 }
@@ -64,7 +65,7 @@ public class Ruby extends Sprite {
 	 public void update(long elapsedTime) {
 	        super.update(elapsedTime);
 
-	    }
+	  }
 	 
 	 
 	

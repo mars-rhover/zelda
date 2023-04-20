@@ -14,6 +14,7 @@ import zelda.Zelda;
 import zelda.collisionManagers.Enemy_PlayfieldCollisionManager;
 import zelda.collisionManagers.Link_EnemyCollisionManager;
 import zelda.collisionManagers.Link_PlayfieldCollisionManager;
+import zelda.collisionManagers.Link_RubyCollisionManager;
 import zelda.enemies.AbstractEnemy;
 
 import com.golden.gamedev.object.CollisionManager;
@@ -75,6 +76,7 @@ public class Quest extends PlayField {
 	    	
 	    	// Ajouter Collision Link - playfield pour la board actuelle
 	    	this.addCollisionGroup(Link_SG, boardActuelle.getForeground(), new Link_PlayfieldCollisionManager(link));
+	    	//this.addCollisionGroup(Link_SG, boardActuelle.getForeground(), new Link_RubyCollisionManager(link, this.add(new Ruby r)));
 	    	
 	
 	    	// Ajouter Collisions Link - Enemy 
