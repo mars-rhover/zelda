@@ -31,10 +31,10 @@ public class Monster extends AbstractEnemy {
 			double xMove = this.getX()-this.getOldX(); // pour avoir l'orientation du sprite
 			
 			if(xMove > 0) // Vers la droite 
-				this.setAnimationFrame(3,3);
+				this.setAnimationFrame(6,7);
 
 			 else if (xMove < 0)  // Vers la gauche
-				this.setAnimationFrame(1,1);
+				this.setAnimationFrame(2,3);
 			
 		}
 		
@@ -43,15 +43,22 @@ public class Monster extends AbstractEnemy {
 			double yMove = this.getY()-this.getOldY();
 			
 			if(yMove < 0) // Vers le haut
-				this.setAnimationFrame(2,2);
+				this.setAnimationFrame(4,5);
 					
 			 else if(yMove > 0) // Vers le bas
-				this.setAnimationFrame(0,0);
+				this.setAnimationFrame(0,1);
 		
+			
 		}
+		
+		this.setAnimate(true);
 		
 		// si une autre lettre ou vide on change pas le frame
 			
+	}
+	
+	protected void attack(int atk) {	 
+		super.attack(atk);
 	}
 	
 }
