@@ -12,8 +12,10 @@ import java.nio.file.Paths;
 import zelda.Link;
 import zelda.Zelda;
 import zelda.collisionManagers.Enemy_PlayfieldCollisionManager;
+import zelda.collisionManagers.LinkBlade_EnemyCollisionManager;
 import zelda.collisionManagers.Link_EnemyCollisionManager;
 import zelda.collisionManagers.Link_PlayfieldCollisionManager;
+import zelda.collisionManagers.testCollisionManager;
 import zelda.enemies.AbstractEnemy;
 
 import com.golden.gamedev.object.CollisionManager;
@@ -62,6 +64,7 @@ public class Quest extends PlayField {
 	    // Désactiver et supprimer tous les collisions groups actuels
 	    	int nbColGroup = this.getCollisionGroups().length;
 	        for(int i = 0; i<nbColGroup; i++) {
+	        	
 	        	this.getCollisionGroups()[0].setActive(false);
 	        	this.removeCollisionGroup(this.getCollisionGroups()[0]);
 	        }
@@ -70,18 +73,13 @@ public class Quest extends PlayField {
 	    	CollisionManager colGroup; // Variable collisionManager pour lisibilité
 	    	
 	    	Link link = this.game.getLink();	// Link
-	    	SpriteGroup Link_SG = link.getSpriteGroup(); // Sprite group de link
 	    	Board boardActuelle = this.boards[curBoardIndexX][curBoardIndexY]; // Nouvelle board actuelle
 	    	
 	    	// Ajouter Collision Link - playfield pour la board actuelle
-	    	this.addCollisionGroup(Link_SG, boardActuelle.getForeground(), new Link_PlayfieldCollisionManager(link));
+	    	this.addCollisionGroup(link.getSpriteGroup(), boardActuelle.getForeground(), new Link_PlayfieldCollisionManager(link));
 	    	
-	
-	    	// Ajouter Collisions Link - Enemy 
-	    	// Et collisions Enemy - Playfield
-	    		// Récupérer tous les enemis du jeu
-	    	for(int i = 0; i < this.game.getEnemies().length; i++) {
-	    		// Parcourir le tableau d'enemis, s'arreter si pas d'enemi trouvé
+	    	// Ajouter Collisions Link - Enemy et collisions Enemy - Playfield
+	    	for(int i = 0; i < this.game.getEnemies().length; i++) { 	// Récupérer tous les enemis du jeu
 	    		if(this.game.getEnemy(i) == null) 
 	    			break;
 	    		
@@ -92,7 +90,8 @@ public class Quest extends PlayField {
 	    		// Si l'enemy est sur la nouvelle board actuelle et il est en vie, ajouter une collision et activer
 	    		if(enemy.isOnBoard(boardActuelle) && enemy.isAlive()) {
 	    			enemy.setActive(true);
-	    			this.addCollisionGroup(Link_SG, Enemy_SG, new Link_EnemyCollisionManager(link,enemy));
+	    			this.addCollisionGroup(link.getVulnerableSpriteGroup(), Enemy_SG, new Link_EnemyCollisionManager(link, enemy));
+	    			this.addCollisionGroup(link.getAttackSpriteGroup(), Enemy_SG, new LinkBlade_EnemyCollisionManager(link,enemy));
 	    			this.addCollisionGroup(Enemy_SG, boardActuelle.getForeground(), new Enemy_PlayfieldCollisionManager(enemy));
 	    			
 		    	// Sinon désactiver l'enemy
@@ -101,7 +100,6 @@ public class Quest extends PlayField {
 	    		}
 	    		
 	    	 }
-	    	
    
 	}
     

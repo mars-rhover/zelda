@@ -7,7 +7,7 @@ import zelda.Zelda;
 public class Spider extends AbstractEnemy {
 
 	// Paramètres spécifiques de l'arraignée
-		protected int life = 20;
+		protected int life = 4;
 		protected double SPEED = 0.6;  
 		protected static int FIGHT_DELAY = 200;
 		protected static int ANIMATION_DELAY = 600;  
@@ -33,7 +33,7 @@ public class Spider extends AbstractEnemy {
 		
 	}
 	
-	protected void reculer(int atk) {
+	public void reculer(int atk) {
 		super.reculer(atk);
 		this.setAnimationFrame(0, 0);
 	}

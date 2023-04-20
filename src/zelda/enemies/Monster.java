@@ -11,7 +11,7 @@ import zelda.scenary.Board;
 public class Monster extends AbstractEnemy {
 	
 	// Paramètres spécifiques du monstre
-	protected int life = 43;
+	protected int life = 8;
 	protected double SPEED = 0.2;  
 	protected int FIGHT_DELAY = 300;
 

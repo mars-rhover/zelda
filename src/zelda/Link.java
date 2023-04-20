@@ -22,6 +22,10 @@ public class Link extends AnimatedSprite {
     
     private static final int ANIMATION_DELAY = 100;  
     
+    private static final int INVUNERABLE_DELAY = 1000;
+    
+    private Timer invulnerableTimer;
+    
     private static final int FIGHT_TIMER = 300;
     
     public static final Shield.Kind DEFAULT_SHIELD = Shield.Kind.SMALL;
@@ -29,6 +33,10 @@ public class Link extends AnimatedSprite {
     public static final Orientation DEFAULT_ORIENTATION = Orientation.NORTH;
     
     private static SpriteGroup links_SGroup;
+    
+    private static SpriteGroup links_Attack_SGroup;
+    
+    private static SpriteGroup links_Vulnerable_SGroup;
     
     private Game game;
     
@@ -42,6 +50,9 @@ public class Link extends AnimatedSprite {
     
     private Timer figth;
     
+    public boolean wasTouched;
+    
+    public boolean canBeTouched;
     
     public Link(Game game) {
         this.game = game;
@@ -49,14 +60,19 @@ public class Link extends AnimatedSprite {
         this.shield = Link.DEFAULT_SHIELD;
         this.orientation = Link.DEFAULT_ORIENTATION;
         this.getAnimationTimer().setDelay(Link.ANIMATION_DELAY);
+        this.invulnerableTimer = new Timer(INVUNERABLE_DELAY);
         this.figth = new Timer(Link.FIGHT_TIMER);
         this.figth.setActive(false);
         links_SGroup = new SpriteGroup("LINK SPRITE GROUP");
+        links_Vulnerable_SGroup = new SpriteGroup("Link Vulnerable");
+        wasTouched = false;
+        canBeTouched = true;
         this.initResources();
     }
     
     private void initResources() {
         BufferedImage[] sprites = new BufferedImage[35];
+
         // Walk north
         sprites[0] = game.getImage("res/sprites/Link/GLWN1.gif");
         sprites[1] = game.getImage("res/sprites/Link/GLWN2.gif");
@@ -83,7 +99,7 @@ public class Link extends AnimatedSprite {
         sprites[15] = game.getImage("res/sprites/Link/GLFN1.gif");
         sprites[16] = game.getImage("res/sprites/Link/GLFWBN.gif");
         // Fight south with wood blade and small shield
-        sprites[17] = sprites[2];
+        sprites[17] = sprites[4];
         sprites[18] = game.getImage("res/sprites/Link/GLFS.gif");
         sprites[19] = game.getImage("res/sprites/Link/GLFWBS.gif");
         // Fight south with wood blade and magical shield
@@ -107,6 +123,20 @@ public class Link extends AnimatedSprite {
         sprites[33] = game.getImage("res/sprites/Link/GLFW.gif");
         sprites[34] = game.getImage("res/sprites/Link/GLFWBW.gif");
         
+        // Sprites d'attaques seules - ordre : Sud, West, Nord, East
+        links_Attack_SGroup = new SpriteGroup("LinkBlade Attack");
+        links_Attack_SGroup.add(new Sprite(sprites[19]));
+        links_Attack_SGroup.add(new Sprite(sprites[31]));
+        links_Attack_SGroup.add(new Sprite(sprites[14]));
+        links_Attack_SGroup.add(new Sprite(sprites[25]));
+        
+        // Sprites de link vulnérable seules        
+        for(int i = 0; i < 13; i++) {
+        	  links_Vulnerable_SGroup.add(new Sprite(sprites[i]));
+        }
+        
+       // this.setImages(vulnerableLink);
+
         this.setImages(sprites);
         this.setLocation(256, 380);
         this.setAnimationFrame(0, 0);
@@ -116,8 +146,18 @@ public class Link extends AnimatedSprite {
     	return links_SGroup;
     }
     
+    public SpriteGroup getAttackSpriteGroup() {
+    	return links_Attack_SGroup;
+    }
+    
+    public SpriteGroup getVulnerableSpriteGroup() {
+    	return links_Vulnerable_SGroup;
+    }
+    
     public void screamInPain() {
     	this.life -= 1;
+    	this.wasTouched = true;
+    	this.canBeTouched = false;
     	System.out.println("Ouuuuch");
     }
     
@@ -132,14 +172,15 @@ public class Link extends AnimatedSprite {
 
     public void setBoard(Board board) {
         links_SGroup.add(this);
+        links_Attack_SGroup.add(this);
+        links_Vulnerable_SGroup.add(this);
     }
     
     public void update(long elapsedTime) {
-    	//System.out.println(this.life);
-    	
-    	
         super.update(elapsedTime);
+        
         if (this.figth.action(elapsedTime)) {
+        	links_Attack_SGroup.setActive(true);
             this.figth.setActive(false);
             if (this.orientation.equals(Orientation.WEST)) {
                 this.setX(this.getX() + 22);
@@ -152,7 +193,22 @@ public class Link extends AnimatedSprite {
                 this.setY(this.getY() + 22);
                 this.setAnimationFrame(0, 0);
             }
+        } else {
+        	links_Attack_SGroup.setActive(false);
         }
+        
+   
+        if(!canBeTouched) {
+        	links_Vulnerable_SGroup.setActive(false);
+        } else {
+        	links_Vulnerable_SGroup.setActive(true);
+        }
+        	
+        if (wasTouched && invulnerableTimer.action(elapsedTime)) {
+        	canBeTouched = true;
+        	wasTouched = false;
+        }
+    
     }
 
     

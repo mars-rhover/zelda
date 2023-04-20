@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 
 import zelda.enemies.*;
 import zelda.scenary.*;
+import zelda.sounds.SoundManager;
 import zelda.objects.*;
 
 import com.golden.gamedev.Game;
@@ -94,7 +95,7 @@ public class Zelda extends Game {
 		// transition de board quand link bouge
 		int x = quest.getCurrentBoard().getX();
 		int y = quest.getCurrentBoard().getY();
-
+		
 		transitionBoard(x, y);
 		if (this.keyPressed(KeyEvent.VK_ALT)) {
 			this.link.fight();
