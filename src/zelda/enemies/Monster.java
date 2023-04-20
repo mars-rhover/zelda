@@ -54,4 +54,8 @@ public class Monster extends AbstractEnemy {
 			
 	}
 	
+	protected void attack(int atk) {	 
+		super.attack(atk);
+	}
+	
 }

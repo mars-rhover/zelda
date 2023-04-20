@@ -107,7 +107,6 @@ public class Link extends AnimatedSprite {
         sprites[33] = game.getImage("res/sprites/Link/GLFW.gif");
         sprites[34] = game.getImage("res/sprites/Link/GLFWBW.gif");
         
-        
         this.setImages(sprites);
         this.setLocation(256, 380);
         this.setAnimationFrame(0, 0);

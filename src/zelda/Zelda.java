@@ -16,12 +16,12 @@ import com.golden.gamedev.object.SpriteGroup;
 
 public class Zelda extends Game {
 
-	// Dimension du playground
-	final static int MENU_SIZEY = 120;
-	final static int SCREEN_SIZEX = 672;
-	final static int SCREEN_SIZEY = 588;
-	final static int PLAYGROUND_SIZEX = SCREEN_SIZEX;
-	final static int PLAYGROUND_SIZEY = SCREEN_SIZEY - MENU_SIZEY;
+	// Dimension du playground, menu et fenetre de jeu
+	public final static int MENU_SIZEY = 120;
+	public final static int SCREEN_SIZEX = 672;
+	public final static int SCREEN_SIZEY = 588;
+	public final static int PLAYGROUND_SIZEX = SCREEN_SIZEX;
+	public final static int PLAYGROUND_SIZEY = SCREEN_SIZEY - MENU_SIZEY;
 
 	private Link link;
 
