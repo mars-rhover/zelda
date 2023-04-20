@@ -31,7 +31,7 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	
 	protected double SPEED = 0.2;  
 	    
-	protected static int ANIMATION_DELAY = 100;  
+	protected static int ANIMATION_DELAY = 300;  
 	    
 	protected static int FIGHT_DELAY = 400;
 	
@@ -67,6 +67,7 @@ public abstract class AbstractEnemy extends AnimatedSprite {
         this.distX = Zelda.PLAYGROUND_SIZEX;
         this.distY = Zelda.PLAYGROUND_SIZEY;
         this.freeze = false;
+        this.setAnimationTimer(new Timer(ANIMATION_DELAY));
         this.FIGHT_TIMER = new Timer(FIGHT_DELAY);
         this.freezeTimer = new Timer(FREEZE_DELAY);
 	}
@@ -155,7 +156,6 @@ public abstract class AbstractEnemy extends AnimatedSprite {
         
         // Viens d'attaquer
         if(!freeze && this.justAttacked) {
-        	System.out.println("Recup");
         	this.reculer(this.attackDir);
         	this.justAttacked = false;
         	freeze = true;	
@@ -217,7 +217,6 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	
 	// Bouge le sprite un instantanément pour attaquer. Pour changer sprites réécrire cette méthode dans sous.classe.
 	protected void attack(int atk) {
-		System.out.println("Attque en "+atk);
 		if(atk == 1) {
 			this.moveX(attackDist);
 		} else if (atk == -1) {
@@ -231,7 +230,6 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	
 	// Fait reculer le sprite (après attaque). Pour changer sprites réécrire cette méthode dans sous.classe.
 	protected void reculer(int atk) {
-		System.out.println("Attqué en "+atk);
 		if(atk == 1) {
 			this.moveX(-attackDist);
 		} else if (atk == -1) {

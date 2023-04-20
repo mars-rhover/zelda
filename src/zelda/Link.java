@@ -129,12 +129,7 @@ public class Link extends AnimatedSprite {
 //    	
 //    }
    
-    	
-    	
-    
-    
-    
-    
+
     public void setBoard(Board board) {
         links_SGroup.add(this);
     }
