@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 
 import zelda.Link;
 import zelda.Zelda;
+import zelda.collisionManagers.Enemy_PlayfieldCollisionManager;
 import zelda.collisionManagers.Link_EnemyCollisionManager;
 import zelda.collisionManagers.Link_PlayfieldCollisionManager;
 import zelda.enemies.AbstractEnemy;
@@ -33,6 +34,9 @@ public class Quest extends PlayField {
     private int curBoardIndexX;
     private int curBoardIndexY;
     
+    private int boardCountX;
+    private int boardCountY;
+    
     private QuestMenu menu;
     
     public Quest(Zelda game) {
@@ -40,10 +44,10 @@ public class Quest extends PlayField {
         this.game = game;
         
         String boardSchema = this.getBoardSchema("res/boards/");
-        int maxX = Integer.parseInt(boardSchema.substring(0, 1));
-        int maxY = Integer.parseInt(boardSchema.substring(2, 3));
+        boardCountX = Integer.parseInt(boardSchema.substring(0, 1));
+        boardCountY = Integer.parseInt(boardSchema.substring(2, 3));
         
-        this.boards = new Board[maxX][maxY];
+        this.boards = new Board[boardCountX][boardCountY];
         
         // Board de départ
         curBoardIndexX = 0;
@@ -74,6 +78,7 @@ public class Quest extends PlayField {
 	    	
 	
 	    	// Ajouter Collisions Link - Enemy 
+	    	// Et collisions Enemy - Playfield
 	    		// Récupérer tous les enemis du jeu
 	    	for(int i = 0; i < this.game.getEnemies().length; i++) {
 	    		// Parcourir le tableau d'enemis, s'arreter si pas d'enemi trouvé
@@ -88,7 +93,8 @@ public class Quest extends PlayField {
 	    		if(enemy.isOnBoard(boardActuelle) && enemy.isAlive()) {
 	    			enemy.setActive(true);
 	    			this.addCollisionGroup(Link_SG, Enemy_SG, new Link_EnemyCollisionManager(link,enemy));
-		    			
+	    			this.addCollisionGroup(Enemy_SG, boardActuelle.getForeground(), new Enemy_PlayfieldCollisionManager(enemy));
+	    			
 		    	// Sinon désactiver l'enemy
 	    		} else {    			
 	    			enemy.setActive(false);
@@ -196,6 +202,14 @@ public class Quest extends PlayField {
     
     public Board[][] getBoards() {
     	return this.boards;
+    }
+    
+    public int getBoardCountX() {
+    	return this.boardCountX;
+    }
+    
+    public int getBoardCountY() {
+    	return this.boardCountY;
     }
     
     public void add(Board board) {

@@ -12,6 +12,7 @@ import com.golden.gamedev.Game;
 import com.golden.gamedev.object.AnimatedSprite;
 import com.golden.gamedev.object.CollisionManager;
 import com.golden.gamedev.object.SpriteGroup;
+import com.golden.gamedev.object.Timer;
 import com.golden.gamedev.object.collision.CollisionGroup;
 
 import zelda.Orientation;
@@ -28,11 +29,13 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	
 	protected static int weapon;
 	
-	protected static double SPEED = 0.2;  
+	protected double SPEED = 0.2;  
 	    
 	protected static int ANIMATION_DELAY = 100;  
 	    
-	protected static int FIGHT_TIMER = 300;
+	protected static int FIGHT_DELAY = 300;
+	
+	protected Timer FIGHT_TIMER;
 	    
     protected Board board;
     
@@ -72,9 +75,9 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 		
 		if(countImg > 0) {
 			BufferedImage[] sprites = new BufferedImage[countImg];
-			for(int i = 1; i < countImg; i++) {
-				filename = prefix+i+suffix;
-				sprites[i-1] = this.game.getImage(folder+"/"+filename);
+			for(int i = 0; i < countImg; i++) {
+				filename = prefix+(i+1)+suffix;
+				sprites[i] = this.game.getImage(folder+"/"+filename);
 			}
 			this.setImages(sprites);
 	        this.setAnimationFrame(0, 0);
@@ -120,10 +123,56 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	// Medhodes pour voir les sprites et les updates
 	public void update(long elapsedTime) {
         super.update(elapsedTime);
+       
+        // si dir = x on a bougé sur X, si dir=y on bougé sur Y
+        char dir = this.moveTowardLink();	
+        this.setOrientationSprite(dir);
 
         // ne pas bouger de frame pour l'instant
         //this.setAnimationFrame(0, 0);
     }
+	
+	// Suivant les sprites, change l'orientation du personnage
+	protected abstract void setOrientationSprite(char xORy);
+
+	// Déplace vers link en fonction de l'attribut de classe SPEED
+	// renvoie x si a bougé sur X, ou y si a bougé sur Y
+	public char moveTowardLink() {
+		double link_PosX = this.game.getLink().getScreenX();
+		double link_PosY = this.game.getLink().getScreenY();
+		
+		double distX = Math.abs(link_PosX-this.getScreenX());
+		double distY = Math.abs(link_PosY-this.getScreenY());
+				
+		// On bouge sur l'axe le plus éloigné d'abord
+		if(distX > distY) {
+			
+			if(link_PosX < this.getScreenX()) {
+				this.moveX(-this.SPEED);
+				return 'x';
+			} else if (link_PosX > this.getScreenX()){
+				this.moveX(this.SPEED);
+				return 'x';
+			}
+			
+		} 
+		
+		
+		if(link_PosY < this.getScreenY()) {
+			this.moveY(-this.SPEED);
+			return 'y';
+		} else if(link_PosY > this.getScreenY()) {
+			this.moveY(this.SPEED);
+			return 'y';
+		}
+		
+		return 'y';
+		
+		
+		
+		
+		
+	}
 	
 	public void decreaseLife() {
 		this.life = this.life - 1;
