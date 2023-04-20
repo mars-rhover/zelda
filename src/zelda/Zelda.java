@@ -10,6 +10,7 @@ import zelda.enemies.*;
 import zelda.scenary.*;
 import zelda.sounds.SoundManager;
 import zelda.objects.*;
+import zelda.objects.*;
 
 import com.golden.gamedev.Game;
 import com.golden.gamedev.GameLoader;
@@ -28,7 +29,14 @@ public class Zelda extends Game {
 
 	private AbstractEnemy[] Enemies;
 	private int EnemyCount = 0;
-
+	private Ruby ruby;
+	private Vie[] arrayVie; 
+	
+	private int arrayPositionXVie[]= {515,530,545,560,575,590};
+	private int positionYVie=60;
+	
+	
+	
 	private Quest quest;
 
 	private boolean menu;
@@ -42,15 +50,28 @@ public class Zelda extends Game {
 		this.link = new Link(this);
 		this.link.setBoard(this.quest.getCurrentBoard());
 		this.menu = false;
-
+		this.ruby=new Ruby(this,270,80);
+		this.arrayVie=new Vie[this.link.getLinkLifePoints()];
+		
+		
+		
+		
+		
+		
+		
 		// On a 3 enemy par board max (en moyenne)
 		this.Enemies = new AbstractEnemy[this.quest.getBoards().length*this.quest.getBoards()[0].length * 3];
-		
 		this.createInitialEnemies();
-
 		this.quest.createCollisionManagers();
+		this.creationVies();
+		
+		
+		
 	}
 
+	
+	
+	
 	public void transitionBoard(int x, int y) {
 
 		// System.out.print(quest.getCurrentBoard().getX());
@@ -90,6 +111,47 @@ public class Zelda extends Game {
 		}
 
 	}
+	
+	
+	
+	
+	
+	public void creationVies() {
+		
+		
+		for (int i=0;i<this.arrayVie.length;i++) {
+			this.arrayVie[i]=new Vie(this,this.arrayPositionXVie[i],this.positionYVie);
+		}
+		
+		
+		
+	}
+
+	public void renderVie(Graphics2D g) {
+		
+		for (int i=0;i<this.link.getLinkLifePoints();i++) {
+			this.arrayVie[i].render(g);
+		}
+	}
+	
+	public void updateVies(long elapsedTime) {
+		//System.out.println(link.getLinkLifePoints());
+	
+		for (int i=0;i<this.link.getLinkLifePoints();i++) {
+			this.arrayVie[i].update(elapsedTime);
+		}
+		
+		
+	}
+	
+	
+	
+	
+		
+	
+	
+	
+	
 
 	public void update(long elapsedTime) {
 		// transition de board quand link bouge
@@ -97,6 +159,11 @@ public class Zelda extends Game {
 		int y = quest.getCurrentBoard().getY();
 		
 		transitionBoard(x, y);
+
+		
+		
+		
+		
 		if (this.keyPressed(KeyEvent.VK_ALT)) {
 			this.link.fight();
 		} else if (this.keyDown(KeyEvent.VK_LEFT)) {
@@ -122,6 +189,8 @@ public class Zelda extends Game {
 				if (this.Enemies[i].isActive() && this.Enemies[i].isAlive())
 					this.Enemies[i].update(elapsedTime);
 		}
+		this.ruby.update(elapsedTime);
+		this.updateVies(elapsedTime);
 
 	}
 
@@ -130,6 +199,9 @@ public class Zelda extends Game {
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		this.quest.render(g);
 		this.link.render(g);
+		
+		this.ruby.render(g);
+		this.renderVie(g);
 
 		// Pour renders des enemies vivants et actifs (de la board)
 		for (int i = 0; i < Enemies.length; i++) {
@@ -148,6 +220,11 @@ public class Zelda extends Game {
 	public Link getLink() {
 		return this.link;
 	}
+
+	
+	
+	
+	
 
 	// GESTION DES ENEMIES 
 	private void createInitialEnemies() {

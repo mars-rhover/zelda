@@ -56,7 +56,11 @@ public class Link extends AnimatedSprite {
     
     public Link(Game game) {
         this.game = game;
+        
+        //pour l'affichage de plus de vie, il faut ajouter des positions additionnels dans l'array de arrayPositionXVie dans Zelda
         this.life=6;
+        
+        
         this.shield = Link.DEFAULT_SHIELD;
         this.orientation = Link.DEFAULT_ORIENTATION;
         this.getAnimationTimer().setDelay(Link.ANIMATION_DELAY);
