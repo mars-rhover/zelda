@@ -170,9 +170,9 @@ public class Link extends AnimatedSprite {
     	return this.life;
     }
     
-    public Orientation getOrientationLink() {  
-    	return this.orientation;
-    }
+//    public void setLifeLink() {
+//    	
+//    }
    
 
     public void setBoard(Board board) {
@@ -186,20 +186,14 @@ public class Link extends AnimatedSprite {
         
         if (this.figth.action(elapsedTime)) {
         	links_Attack_SGroup.setActive(true);
+        	this.canBeTouched = false;
             this.figth.setActive(false);
             if (this.orientation.equals(Orientation.WEST)) {
-                this.setX(this.getX() + 8);
+                this.setX(this.getX() + 12);
                 this.setAnimationFrame(31, 31);
-            } else if (this.orientation.equals(Orientation.EAST)) {
-                this.setX(this.getX() - 8);
-                this.setAnimationFrame(25, 25);
-            } 
-            else if (this.orientation.equals(Orientation.SOUTH)) {
-                this.setY(this.getY() - 8);
-                this.setAnimationFrame(19, 19);
-            }
-            else if (this.orientation.equals(Orientation.NORTH)) {
-                this.setY(this.getY() + 8);
+               
+            } else if (this.orientation.equals(Orientation.NORTH)) {
+                this.setY(this.getY() + 12);
                 this.setAnimationFrame(16, 16);
             }
         } else {
@@ -209,8 +203,10 @@ public class Link extends AnimatedSprite {
         
    
         if(!canBeTouched) {
+        	links_Attack_SGroup.setActive(true);
         	links_Vulnerable_SGroup.setActive(false);
         } else {
+        	links_Attack_SGroup.setActive(false);
         	links_Vulnerable_SGroup.setActive(true);
         }
         	
@@ -293,19 +289,18 @@ public class Link extends AnimatedSprite {
     
     public void fight() {
         if (!this.figth.isActive()) { 
-        	canBeTouched = false;
             this.setSpeed(0, 0);
             this.figth.setActive(true);
             switch (this.orientation) {
             case NORTH:
                 this.setY(this.getY() - 22);
-                this.setAnimationFrame(16, 16);
+                this.setAnimationFrame(14, 16);
                 this.setAnimate(true);
                 break;
             case SOUTH:
                 switch(this.shield) {
                 case SMALL:
-                    this.setAnimationFrame(19, 19);
+                    this.setAnimationFrame(17, 19);
                     break;
                 case MAGICAL:
                     this.setAnimationFrame(20, 22);
@@ -318,7 +313,7 @@ public class Link extends AnimatedSprite {
             case EAST:
                 switch(this.shield) {
                 case SMALL:
-                    this.setAnimationFrame(25, 25);
+                    this.setAnimationFrame(23, 25);
                     break;
                 case MAGICAL:
                     this.setAnimationFrame(26, 28);
@@ -332,7 +327,7 @@ public class Link extends AnimatedSprite {
                 this.setX(this.getX() - 22);
                 switch(this.shield) {
                 case SMALL:
-                    this.setAnimationFrame(31, 31);
+                    this.setAnimationFrame(29, 31);
                     break;
                 case MAGICAL:
                     this.setAnimationFrame(32, 34);

@@ -84,10 +84,10 @@ public class Zelda extends Game {
 		
 		
 		
-		System.out.println(this.link.getOrientationLink());
-		System.out.println(this.link.getScreenX());
+//		System.out.println(this.link.getOrientationLink());
+//		System.out.println(this.link.getScreenX());
 
-		System.out.println(this.link.getScreenY());
+		//System.out.println(this.link.getScreenY());
 		
 		transitionBoard(x, y);
 		
@@ -214,14 +214,14 @@ public class Zelda extends Game {
 			}
 			
 		}//access au dungeon avec GANON
-		if (x==0 && y==2) {
-			if ((link.getScreenX()>60 && link.getScreenX()<77) &&
-					(this.link.getScreenY()>360 && this.link.getScreenY()<379)) {
+		if ((x==0 && y==2) && (link.getScreenX()>60 && link.getScreenX()<77) &&
+				(this.link.getScreenY()>360 && this.link.getScreenY()<379)) {
+		
 				this.quest.changeBoard(1, 3);
 				link.setBoard(this.quest.getCurrentBoard());
 				link.setLocation(200,300);
 				
-			}
+			
 			
 		}
 		

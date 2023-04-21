@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import zelda.Link;
 import zelda.Zelda;
 import zelda.collisionManagers.Enemy_PlayfieldCollisionManager;
+import zelda.collisionManagers.LinkBlade_EnemyCollisionManager;
 import zelda.collisionManagers.Link_EnemyCollisionManager;
 import zelda.collisionManagers.Link_ItemCollisionManager;
 import zelda.collisionManagers.Link_PlayfieldCollisionManager;
@@ -100,7 +101,7 @@ public class Quest extends PlayField {
 	    			enemy.setActive(true);
 	    			this.addCollisionGroup(Link_SG, Enemy_SG, new Link_EnemyCollisionManager(link,enemy));
 	    			this.addCollisionGroup(Enemy_SG, boardActuelle.getForeground(), new Enemy_PlayfieldCollisionManager(enemy));
-	    			
+	    			this.addCollisionGroup(link.getAttackSpriteGroup(), Enemy_SG, new LinkBlade_EnemyCollisionManager(link,enemy));
 		    	// Sinon désactiver l'enemy
 	    		} else {    			
 	    			enemy.setActive(false);
