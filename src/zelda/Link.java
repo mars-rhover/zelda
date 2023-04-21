@@ -169,9 +169,9 @@ public class Link extends AnimatedSprite {
     	return this.life;
     }
     
-//    public void setLifeLink() {
-//    	
-//    }
+    public Orientation getOrientationLink() {  
+    	return this.orientation;
+    }
    
 
     public void setBoard(Board board) {
