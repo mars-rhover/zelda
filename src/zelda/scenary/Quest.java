@@ -56,8 +56,8 @@ public class Quest extends PlayField {
         this.boards = new Board[boardCountX][boardCountY];
         
         // Board de départ
-        curBoardIndexX = 0;
-        curBoardIndexY = 0;
+        curBoardIndexX = 1;
+        curBoardIndexY = 1;
         
         this.initRessources();
  }
@@ -110,13 +110,8 @@ public class Quest extends PlayField {
 	    	 }
 	    	
 	    	// Colisions link - Ruby
-//	    	for(int i = 0; i < this.game.getRubies().length; i++) { 	// Récupérer tous les enemis du jeu
-//	    	
-//	    		// Si l'enemy est sur la nouvelle board actuelle et il est en vie, ajouter une collision et activer
-//	    		this.addCollisionGroup(link.getVulnerableSpriteGroup(),  .getSprite(), new Link_RubyCollisionManager(link, enemy));
-//	    		
-//	    	 }
-   
+	    	this.addCollisionGroup(link.getVulnerableSpriteGroup(),  this.game.getRuby().getSprite(), new Link_RubyCollisionManager(link, this.game.getRuby()));
+
 	    	
 	    	// Colisions link - Object Collectable
 	    	for(int i = 0; i < this.game.getCollectableItems().length; i++) { 	// Récupérer tous les enemis du jeu

@@ -8,6 +8,7 @@ import zelda.collisionManagers.Link_PlayfieldCollisionManager;
 import zelda.objects.Blade;
 import zelda.objects.Shield;
 import zelda.scenary.Board;
+import zelda.sounds.SoundManager;
 
 import com.golden.gamedev.Game;
 import com.golden.gamedev.object.AnimatedSprite;
@@ -50,6 +51,8 @@ public class Link extends AnimatedSprite {
     
     private Timer figth;
     
+    private Timer invulnerableAfterHit;
+    
     public boolean wasTouched;
     
     public boolean canBeTouched;
@@ -66,6 +69,8 @@ public class Link extends AnimatedSprite {
         this.getAnimationTimer().setDelay(Link.ANIMATION_DELAY);
         this.invulnerableTimer = new Timer(INVUNERABLE_DELAY);
         this.figth = new Timer(Link.FIGHT_TIMER);
+        this.invulnerableAfterHit = new Timer(300);
+        this.invulnerableAfterHit.setActive(false);
         this.figth.setActive(false);
         links_SGroup = new SpriteGroup("LINK SPRITE GROUP");
         links_Vulnerable_SGroup = new SpriteGroup("Link Vulnerable");
@@ -161,9 +166,14 @@ public class Link extends AnimatedSprite {
     
     public void screamInPain() {
     	this.life -= 1;
+    	if(life == 0) {
+    		SoundManager.playSound("res/sounds/LOZ_Die.wav", 100);
+    		this.game.stop();
+    	}
     	this.wasTouched = true;
     	this.canBeTouched = false;
     	System.out.println("Ouuuuch");
+    	this.invulnerableAfterHit.setActive(true);
     }
     
     public int getLinkLifePoints() {
@@ -189,24 +199,22 @@ public class Link extends AnimatedSprite {
         	this.canBeTouched = false;
             this.figth.setActive(false);
             if (this.orientation.equals(Orientation.WEST)) {
-                this.setX(this.getX() + 12);
-                this.setAnimationFrame(31, 31);
-               
+                this.setX(this.getX() - 5); 
             } else if (this.orientation.equals(Orientation.NORTH)) {
-                this.setY(this.getY() + 12);
-                this.setAnimationFrame(16, 16);
-            }
+                this.setY(this.getY() - 5);
+            } 
         } else {
         	links_Attack_SGroup.setActive(false);
+        }
+        
+        if (this.invulnerableAfterHit.action(elapsedTime)) {
         	canBeTouched = true;
         }
         
    
         if(!canBeTouched) {
-        	links_Attack_SGroup.setActive(true);
         	links_Vulnerable_SGroup.setActive(false);
         } else {
-        	links_Attack_SGroup.setActive(false);
         	links_Vulnerable_SGroup.setActive(true);
         }
         	

@@ -28,15 +28,14 @@ public class Link_RubyCollisionManager extends AdvanceCollisionGroup {
 	public void collided(Sprite arg0, Sprite arg1) {
 		System.out.println("Link _ Ruby Collision");
 		
-
-		
 		long currentTime = System.currentTimeMillis();
         if (currentTime - lastPlayedTime > MIN_TIME_BETWEEN_SOUNDS_MS) {
-        	SoundManager.playSound("res/sounds/LOZ_Get_Rupee.wav");
+        	SoundManager.playSound("res/sounds/LOZ_Get_Rupee.wav",100);
             lastPlayedTime = currentTime;
         }
-        this.ruby.incrementRubies();
         
+        this.ruby.incrementRubies();
+        this.ruby.setActive(false);
         this.revertPosition1();
        
 		

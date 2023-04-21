@@ -20,6 +20,7 @@ import zelda.Orientation;
 import zelda.Zelda;
 import zelda.objects.Shield;
 import zelda.scenary.Board;
+import zelda.sounds.SoundManager;
 import zelda.objects.*;
 
 
@@ -289,7 +290,8 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 		if(this.life == 0) {
 			this.setActive(false);// desactive le rendu
 			System.out.println("Mooort");
-			
+			SoundManager.playSound("res/sounds/LOZ_Kill.wav", 100);
+			this.game.spawnRubyOn(this.getX(), this.getY());
 			
 		}
 	}

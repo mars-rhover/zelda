@@ -26,7 +26,7 @@ public class Blade extends CollectableOnce {
     
     public void collect() {
     	super.collect();
-    	SoundManager.playSound("res/sounds/LOZ_Fanfare.wav");
+    	SoundManager.playSound("res/sounds/LOZ_Fanfare.wav",100);
     }
     
 }

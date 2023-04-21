@@ -39,7 +39,7 @@ public class Link_EnemyCollisionManager extends AdvanceCollisionGroup {
 	        if(!link.wasTouched && link.canBeTouched) {
 	        	this.link.screamInPain();
 	        	 if (currentTime - lastPlayedTime > MIN_TIME_BETWEEN_SOUNDS_MS) {
-	 	        	SoundManager.playSound("res/sounds/ScreamInPain.wav");
+	 	        	SoundManager.playSound("res/sounds/ScreamInPain.wav",100);
 	 	            lastPlayedTime = currentTime;
 	 	        }
 	        } else {

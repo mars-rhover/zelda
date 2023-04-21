@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
+import zelda.collisionManagers.LinkBlade_EnemyCollisionManager;
+import zelda.collisionManagers.Link_RubyCollisionManager;
 import zelda.enemies.*;
 import zelda.npc.NonPlayableCharacter;
 import zelda.scenary.*;
@@ -57,7 +59,7 @@ public class Zelda extends Game {
 		this.link = new Link(this);
 		this.link.setBoard(this.quest.getCurrentBoard());
 		this.menu = false;
-		this.ruby=new Ruby(this,270,80);
+		this.ruby=new Ruby(this,270,300);
 		
 		this.arrayVie=new Vie[this.link.getLinkLifePoints()];
 		this.collectableItems = new CollectableOnce[10];
@@ -137,7 +139,8 @@ public class Zelda extends Game {
 					this.npcs[i].update(elapsedTime);		
 		}
 		
-		this.ruby.update(elapsedTime);
+		if(this.ruby.isActive())
+			this.ruby.update(elapsedTime);
 		this.updateVies(elapsedTime);
 
 	}
@@ -148,7 +151,9 @@ public class Zelda extends Game {
 		this.quest.render(g);
 		this.link.render(g);
 		
-		this.ruby.render(g);
+		if(this.ruby.isActive())
+			this.ruby.render(g);
+		
 		this.renderVie(g);
 
 		// Pour renders des enemies vivants et actifs (de la board)
@@ -200,7 +205,7 @@ public class Zelda extends Game {
 					(this.link.getScreenY()>165 && this.link.getScreenY()<176)) {
 				this.quest.changeBoard(0, 3);
 				link.setBoard(this.quest.getCurrentBoard());
-				link.setLocation(200,300);
+				link.setLocation((PLAYGROUND_SIZEX/2)-10,PLAYGROUND_SIZEY);
 				
 			}
 			
@@ -301,6 +306,7 @@ public class Zelda extends Game {
 		woodBlade.setBoard(quest.getBoard(0, 3));
 		collectableItems[0] = woodBlade;
 		
+		
 	}
 	
 	public CollectableOnce[] getCollectableItems() {
@@ -318,9 +324,17 @@ public class Zelda extends Game {
 		npcs[0].setSentence("It's dangerous to go alone ! Take this.");
 	}
 	
+	public Ruby getRuby() {
+		return this.ruby;
+	}
+
+
+	public void spawnRubyOn(double posX, double posY) {
+		this.ruby=new Ruby(this,posX,posY);
+		this.quest.addCollisionGroup(link.getSpriteGroup(),  this.ruby.getSprite(), new Link_RubyCollisionManager(link, this.ruby));
+		this.ruby.setActive(true);
+	}
 	
-
-
 	// GESTION DES ENEMIES 
 	private void createInitialEnemies() {
 		int bX = 0, bY = -1; // compteurs d'index de board

@@ -37,7 +37,7 @@ public class Ruby extends Sprite {
 	public Ruby(Zelda game, double posX, double posY) {
 		this.game = game;
 		//System.out.print(rubies_SpriteGroup.getSize());
-		this.ruby=this.game.getImage("res/sprites/Objects/OBP.gif");
+		this.ruby=this.game.getImage("res/sprites/Objects/OBP.png");
 		this.setImage(ruby);
 		this.setLocation(posX, posY); 
 	}
@@ -51,8 +51,10 @@ public class Ruby extends Sprite {
 	}
 	
 	
-	 public Sprite getSprite() {
-	    return this;
+	 public SpriteGroup getSprite() {
+		SpriteGroup s = new SpriteGroup("Item");
+		s.add(this);
+	    return s;
 	 }
 	 
 	 public void setBoard(Board board) {

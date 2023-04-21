@@ -1,5 +1,6 @@
 package zelda.npc;
 
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 
 import com.golden.gamedev.object.Sprite;
