@@ -21,6 +21,7 @@ public class Door extends AbstractTile {
             switch (this.kind) {
         case OUTDOOR_DOOR:
             this.add("res/sprites/scenary/OUTSIDE_DOOR.GIF", -1);
+            
             break;
         case STAIRS:
             this.add("res/sprites/scenary/BGGDS.GIF", -1);

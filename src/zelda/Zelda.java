@@ -108,6 +108,7 @@ public class Zelda extends Game {
 				link.setBoard(this.quest.getCurrentBoard());
 				link.setLocation(link.getX(), SCREEN_SIZEY-link.getHeight());
 			}
+		
 		}
 
 	}
@@ -155,6 +156,9 @@ public class Zelda extends Game {
 
 	public void update(long elapsedTime) {
 		// transition de board quand link bouge
+		System.out.println(this.link.getScreenX());
+		System.out.println(this.link.getScreenY());
+		
 		int x = quest.getCurrentBoard().getX();
 		int y = quest.getCurrentBoard().getY();
 		
