@@ -28,7 +28,7 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	
 	protected int life = 8;
 	
-	protected static int weapon;
+	protected static Weapon weapon;
 	
 	protected double SPEED = 0.2;  
 	    
@@ -44,6 +44,8 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	
 	protected Timer FIGHT_TIMER;
 	    
+	protected Timer WEAPON_TIMER;
+	
     protected Board board;
     
     protected SpriteGroup enemies_SGroup;
@@ -71,6 +73,7 @@ public abstract class AbstractEnemy extends AnimatedSprite {
         this.getAnimationTimer().setDelay(ANIMATION_DELAY);
         this.FIGHT_TIMER = new Timer(FIGHT_DELAY);
         this.freezeTimer = new Timer(FREEZE_DELAY);
+        this.WEAPON_TIMER = new Timer(2000);
 	}
 	
 	 public SpriteGroup getSpriteGroup() {
@@ -154,9 +157,16 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	        if(this.attackDir != 0) {
 	        	if (FIGHT_TIMER.action(elapsedTime)) {
 	        		this.attack(this.attackDir);
+	        		System.out.println("New weapon");
+	        		this.weapon.setPosition(this.getX(), this.getY());
+	        		this.weapon.setActive(true);
 	        		this.justAttacked = true;
 	        	}       
 	        } 
+        }
+        
+        if(WEAPON_TIMER.action(elapsedTime)) {
+        	this.weapon.setActive(false);
         }
           
     }
@@ -169,14 +179,14 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 		double distLimit = (attackDist*2)+(attackDist/2); // Distance de stop pour attaque
 		
 		// Si on est a moins de 50px (distLimit), et que une des dimentions est à moins de 35px, on attaque
-        if(Math.abs(distX) <= distLimit && Math.abs(distY) <= distLimit)  {
+        if(Math.abs(distX) <= 35 && Math.abs(distY) <= 35)  {
 
         	double minDist = Math.abs(distX) < Math.abs(distY) ?  distX : distY;
 //        	System.out.println("distXY : "+distX+" "+distY);
 //        	System.out.println("minDist : "+minDist);
         	
         	// On attaque que si on est à une certaine distance 
-        	if(Math.abs(minDist) < (attackDist+(attackDist/2))) {
+        	if(Math.abs(minDist) < 35) {
         		if(minDist == distY) { // On attaque en X
         			if(distX < 0)
         				return -1;
@@ -198,6 +208,8 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	
 	// Bouge le sprite un instantanément pour attaquer. Pour changer sprites réécrire cette méthode dans sous.classe.
 	protected void attack(int atk) {
+		this.weapon.setActive(true);
+
 		if(atk == 1) {
 			this.moveX(attackDist);
 		} else if (atk == -1) {
@@ -207,6 +219,8 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 		} else if (atk == -2) {
 			this.moveY(-attackDist);
 		}
+	
+		
 	}
 	
 	// Fait reculer le sprite (après attaque). Pour changer sprites réécrire cette méthode dans sous.classe.
@@ -278,6 +292,8 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	
 	  public void render(Graphics2D g) {
 	        super.render(g);
+	        if(this.weapon.isActive())
+	        	this.weapon.render(g);
 	  }
 
 

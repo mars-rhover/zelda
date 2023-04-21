@@ -7,9 +7,9 @@ import zelda.Zelda;
 public class Tektite extends AbstractEnemy {
 
 	// Paramètres spécifiques de l'arraignée
-		protected int life = 4;
+		protected int life = 1;
 		protected double SPEED = 0.6;  
-		protected static int FIGHT_DELAY = 200;
+		protected static int FIGHT_DELAY = 800;
 		protected static int ANIMATION_DELAY = 600;  
 
 	

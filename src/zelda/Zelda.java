@@ -37,7 +37,7 @@ public class Zelda extends Game {
 	
 	private CollectableOnce[] collectableItems; // Items collectables une fois
 	
-	private NonPlayableCharacter[] npcs; // PNJ
+	private NonPlayableCharacter[] npcs; // PNJs
 	
 	private int arrayPositionXVie[]= {515,530,545,560,575,590};
 	private int positionYVie=60;

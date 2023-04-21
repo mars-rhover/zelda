@@ -5,7 +5,7 @@ import zelda.Zelda;
 public class Ganon extends AbstractEnemy {
 
 	// Paramètres spécifiques à Ganon
-		protected int life = 30;
+		protected int life = 10;
 		protected double SPEED = 0.0;  // bouge pas
 		protected static int FIGHT_DELAY = 200;
 		protected static int ANIMATION_DELAY = 2000;  

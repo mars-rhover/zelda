@@ -26,7 +26,7 @@ public class Link extends AnimatedSprite {
     
     private Timer invulnerableTimer;
     
-    private static final int FIGHT_TIMER = 300;
+    private static final int FIGHT_TIMER = 100;
     
     public static final Shield.Kind DEFAULT_SHIELD = Shield.Kind.SMALL;
     
@@ -139,6 +139,7 @@ public class Link extends AnimatedSprite {
         	  links_Vulnerable_SGroup.add(new Sprite(sprites[i]));
         }
         
+       
        // this.setImages(vulnerableLink);
 
         this.setImages(sprites);
@@ -187,18 +188,23 @@ public class Link extends AnimatedSprite {
         	links_Attack_SGroup.setActive(true);
             this.figth.setActive(false);
             if (this.orientation.equals(Orientation.WEST)) {
-                this.setX(this.getX() + 22);
-                if (this.shield.equals(Shield.Kind.SMALL)) {
-                    this.setAnimationFrame(10, 10);
-                } else {
-                    this.setAnimationFrame(12, 12);
-                }
-            } else if (this.orientation.equals(Orientation.NORTH)) {
-                this.setY(this.getY() + 22);
-                this.setAnimationFrame(0, 0);
+                this.setX(this.getX() + 8);
+                this.setAnimationFrame(31, 31);
+            } else if (this.orientation.equals(Orientation.EAST)) {
+                this.setX(this.getX() - 8);
+                this.setAnimationFrame(25, 25);
+            } 
+            else if (this.orientation.equals(Orientation.SOUTH)) {
+                this.setY(this.getY() - 8);
+                this.setAnimationFrame(19, 19);
+            }
+            else if (this.orientation.equals(Orientation.NORTH)) {
+                this.setY(this.getY() + 8);
+                this.setAnimationFrame(16, 16);
             }
         } else {
         	links_Attack_SGroup.setActive(false);
+        	canBeTouched = true;
         }
         
    
@@ -287,18 +293,19 @@ public class Link extends AnimatedSprite {
     
     public void fight() {
         if (!this.figth.isActive()) { 
+        	canBeTouched = false;
             this.setSpeed(0, 0);
             this.figth.setActive(true);
             switch (this.orientation) {
             case NORTH:
                 this.setY(this.getY() - 22);
-                this.setAnimationFrame(14, 16);
+                this.setAnimationFrame(16, 16);
                 this.setAnimate(true);
                 break;
             case SOUTH:
                 switch(this.shield) {
                 case SMALL:
-                    this.setAnimationFrame(17, 19);
+                    this.setAnimationFrame(19, 19);
                     break;
                 case MAGICAL:
                     this.setAnimationFrame(20, 22);
@@ -311,7 +318,7 @@ public class Link extends AnimatedSprite {
             case EAST:
                 switch(this.shield) {
                 case SMALL:
-                    this.setAnimationFrame(23, 25);
+                    this.setAnimationFrame(25, 25);
                     break;
                 case MAGICAL:
                     this.setAnimationFrame(26, 28);
@@ -325,7 +332,7 @@ public class Link extends AnimatedSprite {
                 this.setX(this.getX() - 22);
                 switch(this.shield) {
                 case SMALL:
-                    this.setAnimationFrame(29, 31);
+                    this.setAnimationFrame(31, 31);
                     break;
                 case MAGICAL:
                     this.setAnimationFrame(32, 34);

@@ -11,16 +11,26 @@ import zelda.scenary.Board;
 public class Moblin extends AbstractEnemy {
 	
 	// Paramètres spécifiques du monstre
-	protected int life = 8;
+	protected int life = 2;
 	protected double SPEED = 0.2;  
-	protected int FIGHT_DELAY = 300;
+	protected int FIGHT_DELAY = 600;
 
 	public Moblin(Zelda game, double posX, double posY) {
 		super(game, "Monster", posX,posY);
 		super.game = game;
 		this.loadImagesFolder("res/sprites/Enemies", "monster_", ".png");
+		
+		BufferedImage[] weaponImgs = new BufferedImage[4]; // Sud, Ouest, Nord, Est
+		weaponImgs[0] = this.game.getImage("res/sprites/Objects/fleche_1.png");
+		weaponImgs[1] = this.game.getImage("res/sprites/Objects/fleche_2.png");
+		weaponImgs[2] = this.game.getImage("res/sprites/Objects/fleche_3.png");
+		weaponImgs[3] = this.game.getImage("res/sprites/Objects/fleche_4.png");
+		
+		super.weapon = new Weapon(weaponImgs, posX, posY);
 		super.SPEED = this.SPEED;
 		super.life = this.life;
+		super.attackDist = 20;
+		super.reculDist = 10;
 		super.FIGHT_DELAY = this.FIGHT_DELAY;
 	}
 	
@@ -59,6 +69,19 @@ public class Moblin extends AbstractEnemy {
 	
 	protected void attack(int atk) {	 
 		super.attack(atk);
+		if(atk == 1) {
+			weapon.setAnimationFrame(3,3);
+			weapon.setSpeed(weapon.Speed, 0);
+		} else if (atk == -1) {
+			weapon.setAnimationFrame(1,1);
+			weapon.setSpeed(-weapon.Speed, 0);
+		} else if (atk == 2) {
+			weapon.setAnimationFrame(2,2);
+			weapon.setSpeed(0, weapon.Speed);
+		} else if (atk == -2) {
+			weapon.setAnimationFrame(0,0);
+			weapon.setSpeed(0, -weapon.Speed);
+		}
 	}
 	
 }
