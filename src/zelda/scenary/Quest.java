@@ -1,6 +1,7 @@
 package zelda.scenary;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
@@ -14,10 +15,13 @@ import zelda.Zelda;
 import zelda.collisionManagers.Enemy_PlayfieldCollisionManager;
 import zelda.collisionManagers.LinkBlade_EnemyCollisionManager;
 import zelda.collisionManagers.Link_EnemyCollisionManager;
+import zelda.collisionManagers.Link_ItemCollisionManager;
 import zelda.collisionManagers.Link_PlayfieldCollisionManager;
 import zelda.collisionManagers.testCollisionManager;
 import zelda.enemies.AbstractEnemy;
+import zelda.objects.CollectableOnce;
 
+import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.CollisionManager;
 import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
@@ -56,7 +60,7 @@ public class Quest extends PlayField {
         curBoardIndexY = 0;
         
         this.initRessources();
-    }
+ }
     
     //////////////////////////////////////////////////// COLLISION MANAGERS DANS QUEST
     public void createCollisionManagers() {
@@ -100,7 +104,31 @@ public class Quest extends PlayField {
 	    		}
 	    		
 	    	 }
+	    	
+	    	// Colisions link - Ruby
+//	    	for(int i = 0; i < this.game.getRubies().length; i++) { 	// Récupérer tous les enemis du jeu
+//	    	
+//	    		// Si l'enemy est sur la nouvelle board actuelle et il est en vie, ajouter une collision et activer
+//	    		this.addCollisionGroup(link.getVulnerableSpriteGroup(),  .getSprite(), new Link_RubyCollisionManager(link, enemy));
+//	    		
+//	    	 }
    
+	    	
+	    	// Colisions link - Object Collectable
+	    	for(int i = 0; i < this.game.getCollectableItems().length; i++) { 	// Récupérer tous les enemis du jeu
+	    		if(this.game.getCollectableItem(i) == null) 
+	    			break;
+	    		
+	    		// variables pour raccourci
+	    		CollectableOnce item = this.game.getCollectableItem(i); // L'objet
+	    	
+	    		// Si l'enemy est sur la nouvelle board actuelle et il est en vie, ajouter une collision et activer
+	    		if(item.isOnBoard(boardActuelle) && !item.isCollected) {
+	    			item.setActive(true);
+	    			this.addCollisionGroup(link.getVulnerableSpriteGroup(), item.getSprites(), new Link_ItemCollisionManager(link, item));
+	    			
+	    		}
+	    	 }
 	}
     
     
@@ -121,6 +149,8 @@ public class Quest extends PlayField {
     
         // Lire un/des fichiers textes qui décrivent le board, et pour chaque tile ajouter 
         Path path = Paths.get("res/boards/");
+        
+        Board swordBoard = new Board(this.game, 0, 3);
     	
 		// Récupérer le contenu du répertoire dans un flux 
 		try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
@@ -137,6 +167,7 @@ public class Quest extends PlayField {
 		        	
 		        	String board = this.readBoardFile(filePath.toString());
 		        	 Board b00 = new Board(this.game, indexX, indexY);
+		        	 
 		             
 		             // Lire le string caractère par charactère
 		                for(int i = 0; i < board.length() ; i++) {
@@ -168,11 +199,26 @@ public class Quest extends PlayField {
 		                	else if (c == 'O') {
 		                		b00.add(new Rock(this.game, Rock.Kind.ORANGE_STANDALONE));
 		                	}
-		                	else if (c == 'e') {
+		                	else if (c == 'E') {
 		                		b00.add(new Door(this.game, Door.Kind.STAIRS));
 		                	}
 		                	else if (c == '?') {
 		                		b00.add(new Door(this.game, Door.Kind.FLOOR_MOVE));
+		                	}
+		                	else if (c == 'F') {
+		                		b00.add(new Rock(this.game, Rock.Kind.FIRE));
+		                	}
+		                	else if (c == 'R') {
+		                		b00.add(new Rock(this.game, Rock.Kind.RED_WALL));
+		                	}
+		                	else if (c == 'J') {
+		                		b00.add(new Floor(this.game, Floor.Color.YELLOW));
+		                	}
+		                	else if (c == '$') {
+		                		b00.add(new Rock(this.game, Rock.Kind.DJ_WALL));
+		                	}
+		                	else if (c == '!') {
+		                		b00.add(new Floor(this.game, Floor.Color.DARCK));
 		                	}
 		                }
 		                
@@ -185,12 +231,11 @@ public class Quest extends PlayField {
 		} catch (IOException x) {
 		    System.err.println(x);
 		}
-
         
     }
     
-    
-    public Board getCurrentBoard() {
+
+	public Board getCurrentBoard() {
         return this.boards[curBoardIndexX][curBoardIndexY];
     }
     

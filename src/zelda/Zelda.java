@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import zelda.enemies.*;
+import zelda.npc.NonPlayableCharacter;
 import zelda.scenary.*;
 import zelda.sounds.SoundManager;
 import zelda.objects.*;
@@ -27,10 +28,16 @@ public class Zelda extends Game {
 
 	private Link link;
 
-	private AbstractEnemy[] Enemies;
+	private AbstractEnemy[] enemies; // Enemies
 	private int EnemyCount = 0;
+	
 	private Ruby ruby;
+	
 	private Vie[] arrayVie; 
+	
+	private CollectableOnce[] collectableItems; // Items collectables une fois
+	
+	private NonPlayableCharacter[] npcs; // PNJ
 	
 	private int arrayPositionXVie[]= {515,530,545,560,575,590};
 	private int positionYVie=60;
@@ -51,25 +58,126 @@ public class Zelda extends Game {
 		this.link.setBoard(this.quest.getCurrentBoard());
 		this.menu = false;
 		this.ruby=new Ruby(this,270,80);
+		
 		this.arrayVie=new Vie[this.link.getLinkLifePoints()];
+		this.collectableItems = new CollectableOnce[10];
+		this.enemies = new AbstractEnemy[this.quest.getBoards().length*this.quest.getBoards()[0].length * 3]; 		// On a max 3 enemy par board max (en moyenne)
+		this.npcs = new NonPlayableCharacter[10];
 		
-		
-		
-		
-		
-		
-		
-		// On a 3 enemy par board max (en moyenne)
-		this.Enemies = new AbstractEnemy[this.quest.getBoards().length*this.quest.getBoards()[0].length * 3];
 		this.createInitialEnemies();
+		this.createInitialCollectableItems();
+		this.createNPCs();
 		this.quest.createCollisionManagers();
 		this.creationVies();
-		
-		
+
 		
 	}
 
 	
+
+
+
+	public void update(long elapsedTime) {
+		// transition de board quand link bouge
+		int x = quest.getCurrentBoard().getX();
+		int y = quest.getCurrentBoard().getY();
+		
+		transitionBoard(x, y);
+		
+		if (this.keyPressed(KeyEvent.VK_ALT)) {
+			this.link.fight();
+		} else if (this.keyDown(KeyEvent.VK_LEFT)) {
+			this.link.walk(Orientation.WEST);
+		} else if (this.keyDown(KeyEvent.VK_RIGHT)) {
+			this.link.walk(Orientation.EAST);
+		} else if (this.keyDown(KeyEvent.VK_UP)) {
+			this.link.walk(Orientation.NORTH);
+		} else if (this.keyDown(KeyEvent.VK_DOWN)) {
+			this.link.walk(Orientation.SOUTH);
+		} else if (keyPressed(KeyEvent.VK_ESCAPE)) {
+			finish();
+		} else {
+			this.link.setSpeed(0, 0);
+		}
+		
+		// Pour test
+		if (this.keyPressed(KeyEvent.VK_SPACE)) {
+			this.quest.changeBoard(1, 3);
+			link.setBoard(this.quest.getBoard(1, 3));
+		}
+
+		this.quest.update(elapsedTime);
+		this.link.update(elapsedTime);
+
+		// Updates de tous les enemies vivants et actifs (de la board)
+		for (int i = 0; i < enemies.length; i++) {
+			if (this.enemies[i] != null)
+				if (this.enemies[i].isActive() && this.enemies[i].isAlive())
+					this.enemies[i].update(elapsedTime);
+		}
+		
+		// Updates de tous les items collectables non nuls et non collectés de la board
+		for (int i = 0; i < collectableItems.length; i++) {
+			if (this.collectableItems[i] != null)
+				if (!this.collectableItems[i].isCollected && this.collectableItems[i].isOnBoard(this.quest.getCurrentBoard()) )
+					this.collectableItems[i].update(elapsedTime);			
+		}
+		
+		// Update de tous les NPCs
+		for (int i = 0; i < npcs.length; i++) {
+			if (this.npcs[i] != null)
+				if (this.npcs[i].canInteract() && this.npcs[i].isOnBoard(this.quest.getCurrentBoard()))
+					this.npcs[i].update(elapsedTime);		
+		}
+		
+		this.ruby.update(elapsedTime);
+		this.updateVies(elapsedTime);
+
+	}
+
+	public void render(Graphics2D g) {
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, this.getWidth(), this.getHeight());
+		this.quest.render(g);
+		this.link.render(g);
+		
+		this.ruby.render(g);
+		this.renderVie(g);
+
+		// Pour renders des enemies vivants et actifs (de la board)
+		for (int i = 0; i < enemies.length; i++) {
+			if (this.enemies[i] != null)
+				if (this.enemies[i].isActive() && this.enemies[i].isAlive())
+					this.enemies[i].render(g);
+		}
+		
+		// Render de tous les items collectables non nuls et non collectés de la board
+		for (int i = 0; i < collectableItems.length; i++) {
+			if (this.collectableItems[i] != null)
+				if (!this.collectableItems[i].isCollected && this.collectableItems[i].isOnBoard(this.quest.getCurrentBoard()) )
+					this.collectableItems[i].render(g);			
+		}
+		
+		
+		// Render de tous les NPCs
+		for (int i = 0; i < npcs.length; i++) {
+			if (this.npcs[i] != null)
+				if (this.npcs[i].canInteract() && this.npcs[i].isOnBoard(this.quest.getCurrentBoard()))
+					this.npcs[i].render(g);			
+		}
+
+	}
+	
+	public static void main(String[] args) {
+		GameLoader game = new GameLoader();
+		game.setup(new Zelda(), new Dimension(SCREEN_SIZEX, SCREEN_SIZEY), false);
+		game.start();
+	}
+	
+	
+	
+	//////////////////////////////////////////////////////////////////////////////////////
+
 	
 	
 	public void transitionBoard(int x, int y) {
@@ -113,22 +221,23 @@ public class Zelda extends Game {
 	}
 	
 	
-	
-	
+	// Retourne le sprite group de link : pour les collisions managers
+	public SpriteGroup getLinkSG() {
+		return this.link.getSpriteGroup();
+	}
+
+	public Link getLink() {
+		return this.link;
+	}
+
 	
 	public void creationVies() {
-		
-		
 		for (int i=0;i<this.arrayVie.length;i++) {
 			this.arrayVie[i]=new Vie(this,this.arrayPositionXVie[i],this.positionYVie);
 		}
-		
-		
-		
 	}
 
 	public void renderVie(Graphics2D g) {
-		
 		for (int i=0;i<this.link.getLinkLifePoints();i++) {
 			this.arrayVie[i].render(g);
 		}
@@ -140,104 +249,49 @@ public class Zelda extends Game {
 		for (int i=0;i<this.link.getLinkLifePoints();i++) {
 			this.arrayVie[i].update(elapsedTime);
 		}
-		
-		
 	}
 	
 	
 	
+	// Creations des objects collectables 1 fois
+	private void createInitialCollectableItems() {
+		// Créer l'épée dans la grotte du haut
+		Blade woodBlade = new Blade(this,(PLAYGROUND_SIZEX/2)-21, (PLAYGROUND_SIZEY/2+MENU_SIZEY));
+		woodBlade.setBoard(quest.getBoard(0, 3));
+		collectableItems[0] = woodBlade;
+		
+	}
 	
-		
-	
-	
-	
-	
-
-	public void update(long elapsedTime) {
-		// transition de board quand link bouge
-		int x = quest.getCurrentBoard().getX();
-		int y = quest.getCurrentBoard().getY();
-		
-		transitionBoard(x, y);
-
-		
-		
-		
-		
-		if (this.keyPressed(KeyEvent.VK_ALT)) {
-			this.link.fight();
-		} else if (this.keyDown(KeyEvent.VK_LEFT)) {
-			this.link.walk(Orientation.WEST);
-		} else if (this.keyDown(KeyEvent.VK_RIGHT)) {
-			this.link.walk(Orientation.EAST);
-		} else if (this.keyDown(KeyEvent.VK_UP)) {
-			this.link.walk(Orientation.NORTH);
-		} else if (this.keyDown(KeyEvent.VK_DOWN)) {
-			this.link.walk(Orientation.SOUTH);
-		} else if (keyPressed(KeyEvent.VK_ESCAPE)) {
-			finish();
-		} else {
-			this.link.setSpeed(0, 0);
-		}
-
-		this.quest.update(elapsedTime);
-		this.link.update(elapsedTime);
-
-		// Updates de tous les enemies vivants et actifs (de la board)
-		for (int i = 0; i < Enemies.length; i++) {
-			if (this.Enemies[i] != null)
-				if (this.Enemies[i].isActive() && this.Enemies[i].isAlive())
-					this.Enemies[i].update(elapsedTime);
-		}
-		this.ruby.update(elapsedTime);
-		this.updateVies(elapsedTime);
-
+	public CollectableOnce[] getCollectableItems() {
+		return this.collectableItems;
 	}
 
-	public void render(Graphics2D g) {
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, this.getWidth(), this.getHeight());
-		this.quest.render(g);
-		this.link.render(g);
-		
-		this.ruby.render(g);
-		this.renderVie(g);
-
-		// Pour renders des enemies vivants et actifs (de la board)
-		for (int i = 0; i < Enemies.length; i++) {
-			if (this.Enemies[i] != null)
-				if (this.Enemies[i].isActive() && this.Enemies[i].isAlive())
-					this.Enemies[i].render(g);
-		}
-
+	public CollectableOnce getCollectableItem(int i) {
+		return this.collectableItems[i];
 	}
-
-	// Retourne le sprite group de link : pour les collisions managers
-	public SpriteGroup getLinkSG() {
-		return this.link.getSpriteGroup();
+	
+	// Creation des NPCs
+	private void createNPCs() {
+		npcs[0] = new NonPlayableCharacter(this, quest.getBoard(0, 3), (PLAYGROUND_SIZEX/2)-21, (PLAYGROUND_SIZEY/2+MENU_SIZEY)-50);
+		npcs[0].setImg("res/sprites/Characters/blade_dude.png");
+		npcs[0].setSentence("It's dangerous to go alone ! Take this.");
 	}
+	
+	
 
-	public Link getLink() {
-		return this.link;
-	}
-
-	
-	
-	
-	
 
 	// GESTION DES ENEMIES 
 	private void createInitialEnemies() {
 		int bX = 0, bY = -1; // compteurs d'index de board
-		for(int i = 0; i< (Enemies.length/3);i++) {
+		for(int i = 0; i< (enemies.length/3);i++) {
 			AbstractEnemy newEnemy;
 			Board targetBoard = this.quest.getBoard(0, 0);
 			
 			// Créé un monstre 1 fois sur 2, sinon une araignée
 			if (i % 2 == 0) {
-				newEnemy = new Monster(this, PLAYGROUND_SIZEX/2+100, (PLAYGROUND_SIZEY/2)+MENU_SIZEY);
+				newEnemy = new Moblin(this, PLAYGROUND_SIZEX/2+100, (PLAYGROUND_SIZEY/2)+MENU_SIZEY);
 			} else {
-				newEnemy = new Spider(this, PLAYGROUND_SIZEX/2+100, (PLAYGROUND_SIZEY/2)+MENU_SIZEY);
+				newEnemy = new Tektite(this, PLAYGROUND_SIZEX/2+100, (PLAYGROUND_SIZEY/2)+MENU_SIZEY);
 			}
 			
 			// Trouver une board sur laquelle le mettre 
@@ -252,34 +306,40 @@ public class Zelda extends Game {
 			
 			targetBoard = this.quest.getBoard(bX, bY);
 		
-			this.addEnemy(newEnemy, targetBoard);
+			if(bX==0 && bY==3) {
+				// pas mettre d'enemi
+			} else if(bX==1 && bY==3) {
+				newEnemy = new Ganon(this, PLAYGROUND_SIZEX/2+100, (PLAYGROUND_SIZEY/2)+MENU_SIZEY);
+				this.addEnemy(newEnemy, targetBoard);
+			} else {
+				this.addEnemy(newEnemy, targetBoard);
+			}
 			
 		}
+		
+	
+		
 	}
 	
 	public void addEnemy(AbstractEnemy e, Board b) {
-		this.Enemies[EnemyCount] = e;
-		this.Enemies[EnemyCount].setBoard(b);
+		this.enemies[EnemyCount] = e;
+		this.enemies[EnemyCount].setBoard(b);
 		EnemyCount+=1;
 	}
 	
 	public AbstractEnemy getEnemy(int index) {
-		if (index > this.Enemies.length)
+		if (index > this.enemies.length)
 			throw new IllegalArgumentException("Index de l'enemi incorrect");
 
-		return this.Enemies[index];
+		return this.enemies[index];
 	}
 
 	public AbstractEnemy[] getEnemies() {
-		return this.Enemies;
+		return this.enemies;
 	}
 	
 	
 
-	public static void main(String[] args) {
-		GameLoader game = new GameLoader();
-		game.setup(new Zelda(), new Dimension(SCREEN_SIZEX, SCREEN_SIZEY), false);
-		game.start();
-	}
+	
 
 }

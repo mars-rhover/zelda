@@ -39,10 +39,10 @@ public class Ruby extends Sprite {
 		//System.out.print(rubies_SpriteGroup.getSize());
 		this.ruby=this.game.getImage("res/sprites/Objects/OBP.gif");
 		this.setImage(ruby);
-		this.setLocation(posX, posY);
-		
-        
+		this.setLocation(posX, posY); 
 	}
+	
+	
 	public int getCountRubies() {
 		return this.countRubies;
 	}

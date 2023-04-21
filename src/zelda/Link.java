@@ -101,11 +101,11 @@ public class Link extends AnimatedSprite {
         // Fight north with wood blade
         sprites[14] = game.getImage("res/sprites/Link/GLFWBN1.gif");
         sprites[15] = game.getImage("res/sprites/Link/GLFN1.gif");
-        sprites[16] = game.getImage("res/sprites/Link/GLFWBN.gif");
+        sprites[16] = game.getImage("res/sprites/Link/GLFWBN.png");
         // Fight south with wood blade and small shield
         sprites[17] = sprites[4];
         sprites[18] = game.getImage("res/sprites/Link/GLFS.gif");
-        sprites[19] = game.getImage("res/sprites/Link/GLFWBS.gif");
+        sprites[19] = game.getImage("res/sprites/Link/GLFWBS.png");
         // Fight south with wood blade and magical shield
         sprites[20] = sprites[4];
         sprites[21] = game.getImage("res/sprites/Link/GLFS.gif");
@@ -113,7 +113,7 @@ public class Link extends AnimatedSprite {
         // Fight east with wood blade and small shield
         sprites[23] = sprites[6];
         sprites[24] = game.getImage("res/sprites/Link/GLFE.gif");
-        sprites[25] = game.getImage("res/sprites/Link/GLFWBE.gif");
+        sprites[25] = game.getImage("res/sprites/Link/GLFWBE.png");
         // Fight east with wood blade and magical shield
         sprites[26] = sprites[8];
         sprites[27] = game.getImage("res/sprites/Link/GLFE.gif");
@@ -121,7 +121,7 @@ public class Link extends AnimatedSprite {
         // Fight west with wood blade and small shield
         sprites[29] = game.getImage("res/sprites/Link/GLFSSWBW.gif");
         sprites[30] = game.getImage("res/sprites/Link/GLFW.gif");
-        sprites[31] = game.getImage("res/sprites/Link/GLFWBW.gif");
+        sprites[31] = game.getImage("res/sprites/Link/GLFWBW.png");
         // Fight west with wood blade and magical shield
         sprites[32] = game.getImage("res/sprites/Link/GLFMSWBW.gif");
         sprites[33] = game.getImage("res/sprites/Link/GLFW.gif");
@@ -131,7 +131,7 @@ public class Link extends AnimatedSprite {
         links_Attack_SGroup = new SpriteGroup("LinkBlade Attack");
         links_Attack_SGroup.add(new Sprite(sprites[19]));
         links_Attack_SGroup.add(new Sprite(sprites[31]));
-        links_Attack_SGroup.add(new Sprite(sprites[14]));
+        links_Attack_SGroup.add(new Sprite(sprites[16]));
         links_Attack_SGroup.add(new Sprite(sprites[25]));
         
         // Sprites de link vulnérable seules        
