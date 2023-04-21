@@ -10,7 +10,8 @@ public class Floor extends AbstractTile {
     public enum Color {
         GREEN,
         DARCK,
-        SAND
+        SAND,
+        YELLOW
     }
     private Color color;
     
@@ -24,7 +25,12 @@ public class Floor extends AbstractTile {
         case GREEN:
             break;
         case DARCK:
+            this.add(new Sprite(this.game.getImage("res/sprites/scenary/BGGSD.png")), -1);
             break;
+        case YELLOW: 
+            this.add(new Sprite(this.game.getImage("res/sprites/Dongeon/4/DG4F6.png")), -1);
+            break;
+        
         }
     }
 }

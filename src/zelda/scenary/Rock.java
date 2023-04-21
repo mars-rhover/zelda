@@ -1,5 +1,7 @@
 package zelda.scenary;
 
+import com.golden.gamedev.object.Sprite;
+
 import zelda.Zelda;
 
 public class Rock extends AbstractTile {
@@ -14,7 +16,10 @@ public class Rock extends AbstractTile {
         GREEN_NORTH_WEST_CORNER,
         BUSH,
         GREEN_STANDALONE,
-        ORANGE_STANDALONE
+        ORANGE_STANDALONE,
+        FIRE,
+        RED_WALL,
+        DJ_WALL
     }
     
     private Kind kind;
@@ -62,7 +67,7 @@ public class Rock extends AbstractTile {
         case GREEN_SOUTH_WEST_CORNER:
             this.add("res/sprites/scenary/GREEN_SOUTH_WEST_ROCK_1.GIF", -1);
             this.add("res/sprites/scenary/GREEN_SOUTH_WEST_ROCK_2.GIF", 1);
-            this.add("res/sprites/scenary/GREEN_SOUTH_WEST_ROCK_3.GIF", -1);
+            this.add("res/sprites/scenary/GREEN_SOUTH_WEST_ROCK_3.GIF", 1);
             this.add("res/sprites/scenary/GREEN_SOUTH_WEST_ROCK_4.GIF", -1);
             break;
         case BUSH: 
@@ -73,6 +78,15 @@ public class Rock extends AbstractTile {
         	break;
         case ORANGE_STANDALONE: 
         	this.add("res/sprites/scenary/BGBR.GIF", 1);
+        	break;
+        case RED_WALL:
+        	this.add("res/sprites/scenary/BGBSR.GIF", 1);
+        	break;
+        case FIRE:
+        	this.add("res/sprites/scenary/fire_1.png", 1);
+        	break;
+        case DJ_WALL:
+        	this.add("res/sprites/Dongeon/4/DG4F1.png", 1);
         	break;
         }
 

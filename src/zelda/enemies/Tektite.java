@@ -4,7 +4,7 @@ import com.golden.gamedev.object.Timer;
 
 import zelda.Zelda;
 
-public class Spider extends AbstractEnemy {
+public class Tektite extends AbstractEnemy {
 
 	// Paramètres spécifiques de l'arraignée
 		protected int life = 4;
@@ -13,7 +13,7 @@ public class Spider extends AbstractEnemy {
 		protected static int ANIMATION_DELAY = 600;  
 
 	
-	public Spider(Zelda game, double posX, double posY) {
+	public Tektite(Zelda game, double posX, double posY) {
 		super(game, "Spider", posX, posY);
 		super.game = game;
 		this.loadImagesFolder("res/sprites/Enemies", "spider_", ".png");

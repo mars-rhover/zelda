@@ -8,7 +8,7 @@ import com.golden.gamedev.object.SpriteGroup;
 import zelda.Zelda;
 import zelda.scenary.Board;
 
-public class Monster extends AbstractEnemy {
+public class Moblin extends AbstractEnemy {
 	
 	// Paramètres spécifiques du monstre
 
@@ -18,7 +18,7 @@ public class Monster extends AbstractEnemy {
 	protected double SPEED = 0.2;  
 	protected int FIGHT_DELAY = 300;
 
-	public Monster(Zelda game, double posX, double posY) {
+	public Moblin(Zelda game, double posX, double posY) {
 		super(game, "Monster", posX,posY);
 		super.game = game;
 		this.loadImagesFolder("res/sprites/Enemies", "monster_", ".png");

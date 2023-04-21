@@ -273,7 +273,7 @@ public abstract class AbstractEnemy extends AnimatedSprite {
 	public void decreaseLife() {
 		this.life = this.life - 1;
 		if(this.life == 0) {
-			this.setActive(false);// desactive le collision manager
+			this.setActive(false);// desactive le rendu
 			System.out.println("Mooort");
 			
 			
