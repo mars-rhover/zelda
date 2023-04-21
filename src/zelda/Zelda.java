@@ -82,6 +82,13 @@ public class Zelda extends Game {
 		int x = quest.getCurrentBoard().getX();
 		int y = quest.getCurrentBoard().getY();
 		
+		
+		
+		System.out.println(this.link.getOrientationLink());
+		System.out.println(this.link.getScreenX());
+
+		System.out.println(this.link.getScreenY());
+		
 		transitionBoard(x, y);
 		
 		if (this.keyPressed(KeyEvent.VK_ALT)) {
@@ -187,7 +194,38 @@ public class Zelda extends Game {
 
 		// pour ne pas depasser l'integralite de la carte
 
-		if ((x == 0 || x == 1) && (y == 0 || y == 1 || y == 2)) {
+		// Pour acceder au dungeon
+		if (x==0 && y==1) {
+			if ((link.getScreenX()>292 && link.getScreenX()<297) &&
+					(this.link.getScreenY()>165 && this.link.getScreenY()<176)) {
+				this.quest.changeBoard(0, 3);
+				link.setBoard(this.quest.getCurrentBoard());
+				link.setLocation(200,300);
+				
+			}
+			
+		} // Pour sortir du dungeon
+		if (x==0 && y==3) {
+			if ((link.getScreenY()>SCREEN_SIZEY-3)) {	
+				this.quest.changeBoard(0, 1);
+				link.setBoard(this.quest.getCurrentBoard());
+				link.setLocation(300,180);
+				
+			}
+			
+		}//access au dungeon avec GANON
+		if (x==0 && y==2) {
+			if ((link.getScreenX()>60 && link.getScreenX()<77) &&
+					(this.link.getScreenY()>360 && this.link.getScreenY()<379)) {
+				this.quest.changeBoard(1, 3);
+				link.setBoard(this.quest.getCurrentBoard());
+				link.setLocation(200,300);
+				
+			}
+			
+		}
+		
+		else {
 
 			if (link.getScreenY() < SCREEN_SIZEY && link.getScreenX() > SCREEN_SIZEX) {
 				// changer sur x a droite
@@ -216,9 +254,12 @@ public class Zelda extends Game {
 				link.setBoard(this.quest.getCurrentBoard());
 				link.setLocation(link.getX(), SCREEN_SIZEY-link.getHeight());
 			}
+			
+			}
+		
 		}
 
-	}
+	
 	
 	
 	// Retourne le sprite group de link : pour les collisions managers
